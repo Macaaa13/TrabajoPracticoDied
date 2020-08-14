@@ -18,8 +18,6 @@ public class CamionController {
 	private CamionDao cd;
 
 	
-	//----- Constructores -----
-	// Constructor para Agregar Camión
 	public CamionController(PanelCamiones pc) {
 		lista = new ArrayList<Camion>();
 		this.pc = pc;
@@ -31,12 +29,12 @@ public class CamionController {
 	public void guardar() throws DatosObligatoriosException, FormatoNumeroException {
 		if(validacionVacios()) {
 				if(camposCorrectos()) {
-				this.actualizarModelo();
-				cd.altaActualizacionCamion(c);
-				lista.clear();
-				lista.addAll(cd.buscarTodos(""));
-				pc.informarSituacion("Camión guardado exitosamente");
-				pc.limpiar();
+					this.actualizarModelo();
+					cd.altaActualizacionCamion(c);
+					lista.clear();
+					lista.addAll(cd.buscarTodos(""));
+					pc.informarSituacion("Camión guardado exitosamente");
+					pc.limpiar();
 			}
 		}
 	}

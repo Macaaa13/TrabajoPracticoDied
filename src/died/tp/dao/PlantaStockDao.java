@@ -94,13 +94,13 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		return i;
 	}
 	
-	public void darAltaStock(Planta p, Stock s) {
+	public void darAltaStock(String p, Stock s) {
 		Connection conn = null;
 		PreparedStatement consulta = null;
 		try {
 			conn = Conexion.getConexion();
 			consulta = conn.prepareStatement(insertStock);
-			consulta.setInt(1, p.getId());
+			consulta.setInt(1, this.getPlanta(p).getId());
 			consulta.setInt(2, s.getProducto().getId());
 			consulta.setInt(3, s.getCantidad());
 			consulta.setInt(4, s.getPuntoPedido());
@@ -259,21 +259,17 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		return stock;
 	}
 
-	public List<Planta> traerPlantas() {
-		List<Planta> resultado = new ArrayList<Planta>();
+	public List<String> traerPlantas() {
+		List<String> resultado = new ArrayList<String>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			conn = Conexion.getConexion();
-			pstmt= conn.prepareStatement("select * from Planta");
+			pstmt= conn.prepareStatement("select nombrePlanta from Planta");
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				Planta p = new Planta();
-				p.setId(rs.getInt("id_planta"));
-				p.setNombrePlanta(rs.getString("nombrePlanta"));
-				p.setStockInsumos(this.traerTodos(p.getId(),null));
-				resultado.add(p);
+				resultado.add(rs.getString("nombrePlanta"));
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();

@@ -45,10 +45,7 @@ public class PanelRegistrarOrden extends JPanel{
 		JTable tablaDatos2 = new JTable(tablaModelo2);
 		tablaDatos2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tablaDatos2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		DefaultTableCellRenderer centerRenderer2 = new DefaultTableCellRenderer();
-		centerRenderer2.setHorizontalAlignment( JLabel.CENTER );
-		tablaDatos2.setDefaultRenderer(String.class, centerRenderer2);
-		
+			
 		JScrollPane scrollPanel_1 = new JScrollPane(tablaDatos2);
 		scrollPanel_1.setBounds(416, 69, 474, 234);
 		add(scrollPanel_1);

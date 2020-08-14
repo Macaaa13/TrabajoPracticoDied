@@ -47,9 +47,6 @@ public class PanelStock extends JPanel {
 		JTable tablaDatos = new JTable(tablaModelo);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-		tablaDatos.setDefaultRenderer(String.class, centerRenderer);
 		tablaDatos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent evt) {
@@ -69,7 +66,6 @@ public class PanelStock extends JPanel {
 		JButton btnActualizarStock = new JButton("Actualizar Stock");
 		btnActualizarStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sc.setPlanta(comboBoxPlanta.getSelectedItem().toString());
 				if(tablaDatos.getSelectedRow() != -1) {
 					int rta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que quiere modificar el stock?", "Advertencia", JOptionPane.YES_NO_OPTION);
 					if(rta == JOptionPane.YES_OPTION) {
@@ -98,19 +94,7 @@ public class PanelStock extends JPanel {
 		JButton btnAgregarPlanta = new JButton("Agregar a Planta");
 		btnAgregarPlanta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sc.setPlanta(comboBoxPlanta.getSelectedItem().toString());
-				if(!sc.controlarInsumoPlanta(textFieldInsumo.getText())) {
-					if(sc.validacionVacios()) {
-						if(sc.validarCampos()) {
-							sc.agregarInsumoPlanta();
-							JOptionPane.showMessageDialog(null, "Agregado el insumo "+ textFieldInsumo.getText()+" a la planta "+comboBoxPlanta.getSelectedItem().toString());
-							//limpiar();
-						}
-					}
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "El insumo ya existe en la planta"+comboBoxPlanta.getSelectedItem().toString());
-				}
+				sc.agregarInsumoPlanta();
 			}
 		});
 		btnAgregarPlanta.setBounds(47, 221, 145, 30);
@@ -135,7 +119,6 @@ public class PanelStock extends JPanel {
 		JButton btnCargarStocks = new JButton("Cargar stocks");
 		btnCargarStocks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sc.setPlanta(comboBoxPlanta.getSelectedItem().toString());
 				List<Integer> st = new ArrayList<Integer>();
 				List<Stock> stocks = sc.traerTodos(st);
 				if(!stocks.isEmpty()) {

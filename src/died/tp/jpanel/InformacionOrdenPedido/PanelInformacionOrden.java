@@ -34,9 +34,6 @@ public class PanelInformacionOrden extends JPanel{
 		JTable tablaDatos = new JTable(tablaModelo);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-		tablaDatos.setDefaultRenderer(String.class, centerRenderer);
 
 		JScrollPane scrollPanel = new JScrollPane(tablaDatos);
 		scrollPanel.setBounds(226, 71, 340, 280);

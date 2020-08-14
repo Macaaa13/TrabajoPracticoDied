@@ -3,6 +3,7 @@ package died.tp.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 
 import died.tp.dao.PlantaStockDao;
 import died.tp.dominio.Insumo;
@@ -32,25 +33,35 @@ public class StockController {
 	
 	public void setPlanta(String planta) {
 		this.p = psd.getPlanta(planta);
-		this.listaStock = this.traerTodos(null);
-		p.setStockInsumos(listaStock);
 	}
 	
 	public List<Stock> traerTodos(List<Integer> s){
 		return psd.traerTodos(p.getId(),s);
 	}
-	
 
 	public void agregarInsumoPlanta() {
-		Insumo i = this.existeInsumo();
-		if(i != null) {
-			actualizarModelo(i);
-			p.getStockInsumos().add(s);
-			psd.darAltaStock(p,s);
+		setPlanta(ps.getComboBoxPlanta().getSelectedItem().toString());
+		if(!controlarInsumoPlanta(ps.getTextFieldInsumo().getText())) {
+			if(validacionVacios()) {
+				if(validarCampos()) {
+					Insumo i = this.existeInsumo();
+					if(i != null) {
+						actualizarModelo(i);
+						p.getStockInsumos().add(s);
+						psd.darAltaStock(p.getNombrePlanta(),s);
+						JOptionPane.showMessageDialog(null, "Agregado el insumo "+ ps.getTextFieldInsumo().getText()+" a la planta "+ps.getComboBoxPlanta().getSelectedItem().toString());
+						//limpiar();
+					}
+					else {
+						ps.informarError("El insumo no fue agregado.\n Por favor agregarlo desde la pestaña Insumos y volver a intentar.");
+					}
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "El insumo ya existe en la planta"+ps.getComboBoxPlanta().getSelectedItem().toString());
+			}
 		}
-		else {
-			ps.informarError("El insumo no fue agregado.\n Por favor agregarlo desde la pestaña Insumos y volver a intentar.");
-		}
+		
 	}
 	public Insumo existeInsumo() {
 		return psd.traerInsumo(ps.getTextFieldInsumo().getText());	
@@ -78,13 +89,8 @@ public class StockController {
 	    }
 	}
 
-	public List<String> traerPlantas() {
-		List<Planta> plantas = psd.traerPlantas();
-		List<String> resultado = new ArrayList<String>();
-		for(Planta p: plantas) {
-			resultado.add(p.getNombrePlanta());
-		}
-		return resultado;
+	public List<String> traerPlantas() {		
+		return psd.traerPlantas();
 	}
 
 

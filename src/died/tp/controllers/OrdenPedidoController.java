@@ -39,7 +39,6 @@ public class OrdenPedidoController {
 		 opd = new OrdenDePedidoDao();
 		 totalCompra = 0;
 	}
-	
 
 	public List<String> traerPlantas() {
 		List<Planta> plantas = psd.traerPlantas();

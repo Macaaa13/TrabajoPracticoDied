@@ -4,12 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import died.tp.dominio.Camion;
 import died.tp.dominio.Insumo;
 import died.tp.dominio.InsumoGeneral;
 import died.tp.dominio.InsumoLiquido;
