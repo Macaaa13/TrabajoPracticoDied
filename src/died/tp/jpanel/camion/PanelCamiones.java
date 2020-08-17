@@ -213,12 +213,14 @@ public class PanelCamiones extends JPanel {
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tablaModelo.mostrar(cc.buscar());
-				tablaModelo.fireTableDataChanged();
-				btnCancelar.setEnabled(true);
-				btnAgregar.setEnabled(false);
-				btnModificar.setEnabled(true);
-				btnEliminar.setEnabled(true);
+				boolean respuesta = tablaModelo.mostrar(cc.buscar());
+				if(respuesta) {
+					tablaModelo.fireTableDataChanged();
+					btnCancelar.setEnabled(true);
+					btnAgregar.setEnabled(false);
+					btnModificar.setEnabled(true);
+					btnEliminar.setEnabled(true);
+				}
 			}
 		});
 		btnBuscar.setBounds(180, 312, 120, 30);

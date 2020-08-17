@@ -4,7 +4,7 @@ public abstract class Insumo {
 
 	//Atributos
 	private Integer id;
-	private String descripcion;
+	private String nombre;
 	private String uMedida;
 	private Integer costo;
 	
@@ -20,7 +20,7 @@ public abstract class Insumo {
 	
 	//Constructor
 	public Insumo(String d, String u, Integer c) {
-		this.descripcion = d;
+		this.nombre = d;
 		this.uMedida = u;
 		this.costo = c;
 	}
@@ -31,8 +31,8 @@ public abstract class Insumo {
 	public Insumo() {
 	
 	}
-	public String getDescripcion() {
-		return descripcion;
+	public String getNombre() {
+		return nombre;
 	}
 
 	public Integer getId() {
@@ -44,7 +44,7 @@ public abstract class Insumo {
 	}
 
 	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+		this.nombre = descripcion;
 	}
 
 	public String getuMedida() {

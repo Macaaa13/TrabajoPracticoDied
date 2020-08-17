@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import died.tp.dao.PlantaStockDao;
 import died.tp.dao.InsumoDao;
 import died.tp.dao.OrdenDePedidoDao;
+import died.tp.dao.PlantaStockDao;
 import died.tp.dominio.Insumo;
 import died.tp.dominio.OrdenDePedido;
 import died.tp.dominio.Planta;
@@ -30,8 +30,7 @@ public class OrdenPedidoController {
 	
 	public OrdenPedidoController(PanelRegistrarOrden pr) {
 		 pro = pr;
-		 insumosOrden = new HashMap<Insumo,Integer>();
-		 
+		 insumosOrden = new HashMap<Insumo,Integer>(); 
 		 plantas = new ArrayList<Planta>();
 		 cantidades = new ArrayList<Integer>();
 		 psd = new PlantaStockDao();
@@ -41,12 +40,7 @@ public class OrdenPedidoController {
 	}
 
 	public List<String> traerPlantas() {
-		List<Planta> plantas = psd.traerPlantas();
-		List<String> resultado = new ArrayList<String>();
-		for(Planta p: plantas) {
-			resultado.add(p.getNombrePlanta());
-		}
-		return resultado;
+		return psd.traerPlantas();
 	}
 
 	public Map<Insumo,Integer> traerInsumos() {
@@ -55,7 +49,8 @@ public class OrdenPedidoController {
 	}
 
 	//AGREGO UN NUEVO MAP PARA LOS INSUMOS DE LA PRIMERA TABLA (LOS QUE SE MUESTRAN SIEMPRE)
-	public Insumo nuevoInsumo(Integer fila) {
+	public Insumo nuevoInsumo(Integer fila, Integer cantidad) {
+		this.insumosOrden.put(insumosAntesSeleccion.keySet().stream().collect(Collectors.toList()).get(fila),cantidad);
 		return this.insumosAntesSeleccion.keySet().stream().collect(Collectors.toList()).get(fila);
 	}
 
@@ -67,7 +62,6 @@ public class OrdenPedidoController {
 
 
 	public boolean agregarOrden() {
-		//TODO TENGO QUE VALIDAR: SI TIENE LA PLANTA ESE INSUMO Y, SI LO TIENE, QUE TENGA EL STOCK SUFICIENTE. ESO HAY QUE HACERLO EN LA PANTALLA 2
 		if(totalCompra!=0) {
 			OrdenDePedido op = new OrdenDePedido();
 			op.setDestino(psd.getPlanta(pro.getComboBoxPlanta().getSelectedItem().toString()));
@@ -88,12 +82,6 @@ public class OrdenPedidoController {
 			return false;
 		}
 	}
-
-	
-
-	
-	
-	
 	
 	
 }

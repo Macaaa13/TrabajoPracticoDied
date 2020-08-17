@@ -2,41 +2,35 @@ package died.tp.controllers;
 
 import java.util.*;
 import died.tp.dao.PlantaDao;
+import died.tp.dao.PlantaStockDao;
 import died.tp.dominio.Planta;
-import died.tp.grafos.GrafoRutas;
 import died.tp.jpanel.planta.PanelPlantas;
 import died.tp.jpanel.ruta.PanelRutas;
 
 public class PlantaController {
 
 	//Atributos
-	 private PlantaDao psd;
+	 private PlantaDao pd;
 	 private PanelPlantas pp;
-	 private List<Planta> lista;
-	 private GrafoRutas gr;
-	 private PanelRutas pr;
+	
 	 
 	 //Constructor
 	 public PlantaController(){
-		 psd = new PlantaDao();
+		 pd = new PlantaDao();
 	 }
 	 
 	 public PlantaController(PanelPlantas ps) {
-		 psd = new PlantaDao();
+		 pd = new PlantaDao();
 		 pp = ps;
-		 lista = new ArrayList<Planta>();
-		 gr = new GrafoRutas();
 	 }
 	 
 	 public PlantaController(PanelRutas pr) {
-		 psd = new PlantaDao();
-		 this.pr = pr;
-		 lista = new ArrayList<Planta>();
-		 gr = new GrafoRutas();
+		 pd = new PlantaDao();
 	 }
 	 
 	 public List<Planta> getPlantas() {
-			return psd.traerPlantas();
+		 	PlantaStockDao psd = new PlantaStockDao();
+			return psd.traerListaPlantas();
 		}
 	 
 	 public boolean agregarPlanta() {	
@@ -48,7 +42,7 @@ public class PlantaController {
 			}
 		}
 		if(b == true) {
-			psd.altaPlanta(nombrePlanta);
+			pd.altaPlanta(nombrePlanta);
 		}
 		return b;
 	}

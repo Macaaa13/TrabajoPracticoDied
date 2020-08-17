@@ -143,7 +143,7 @@ public class InsumoController {
 	
 	public String armarString() {
 		String s = new String();
-		if(i.getDescripcion()!=null) s+= "descripcion = '"+ i.getDescripcion() + "' AND ";
+		if(i.getNombre()!=null) s+= "descripcion = '"+ i.getNombre() + "' AND ";
 		if(i.getCosto()!= null) s+= "costoUnidad = '"+ i.getCosto().toString() + "' AND ";
 		if(i.getuMedida()!= null) s+= "unidadMedida = '"+ i.getuMedida() + "' AND ";
 		if(i.esGeneral() && i.getPesoDensidad()!= null) s+= "peso = '"+ i.getPesoDensidad()+ "' AND ";

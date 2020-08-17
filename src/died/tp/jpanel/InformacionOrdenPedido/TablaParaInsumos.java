@@ -26,7 +26,7 @@ public class TablaParaInsumos extends AbstractTableModel{
 		Insumo i = data.get(fila);
 		switch(columna) {
 			case 0: return nroped;
-			case 1: return i.getDescripcion();
+			case 1: return i.getNombre();
 			case 2: return cantidades.get(fila);
 		}
 		return null;

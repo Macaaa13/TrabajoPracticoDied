@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
+
 import died.tp.dominio.Camion;
 import died.tp.dominio.Insumo;
 import died.tp.dominio.InsumoGeneral;
@@ -25,7 +27,7 @@ public class OrdenDePedidoDao {
 	private static String traerTodas = "select * from OrdenPedido where estado = ?";
 	private static String obtenerPlanta = "select * from Planta where id_planta = ?";
 	private static String cambiarEstadoOrden = "update OrdenPedido set estado = ? where id_ordenPedido = ?";
-	private static String camionesNoAsignados = "select c.* from Camion c, OrdenPedido op where c.id_camion <> op.camionAsignado";
+	private static String camionesNoAsignados = "select c.* from Camion c, OrdenPedido op where op.camionAsignado is null";
 	
 	public void agregarOrdenPedido(OrdenDePedido op) {
 		Connection con = null;
@@ -45,7 +47,7 @@ public class OrdenDePedidoDao {
 				for(int i = 0; i < op.getInsumos().size();i++) {
 					pr2 = con.prepareStatement(insertOrdenInsumos);
 					pr2.setInt(1, rs.getInt("id"));
-					List<Insumo> insumos = new ArrayList<>(op.getInsumos().keySet());
+					List<Insumo> insumos = op.getInsumos().keySet().stream().collect(Collectors.toList());
 					pr2.setInt(2, insumos.get(i).getId());
 					pr2.setInt(3, op.getInsumos().get(insumos.get(i)));
 					pr2.execute();
@@ -156,7 +158,7 @@ public class OrdenDePedidoDao {
 		ResultSet rs = null;
 		try {
 			con = Conexion.getConexion();
-			pr = con.prepareStatement("select 	i.*, oi.cantidadInsumo as cantidad from ordeninsumos oi, insumo i where i.id_insumo = oi.id_insumo and id_ordenPedido = ? ");
+			pr = con.prepareStatement("select i.*, oi.cantidadInsumo as cantidad from ordeninsumos oi, insumo i where i.id_insumo = oi.id_insumo and id_ordenPedido = ? ");
 			pr.setInt(1, id);
 			rs = pr.executeQuery();
 			while(rs.next()) {
@@ -212,7 +214,7 @@ public class OrdenDePedidoDao {
 			p.setNombrePlanta(rs.getString("nombrePlanta"));
 			}
 			PlantaStockDao psd = new PlantaStockDao();
-			p.setStockInsumos(psd.traerTodos(p.getId(), null));
+			p.setStockInsumos(psd.traerTodos(p.getId()));
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -329,7 +331,7 @@ public class OrdenDePedidoDao {
 			pr.setDouble(1, c.getKmRecorridos());
 			pr.setInt(2, c.getId());
 			pr.executeUpdate();
-			pr2 = conn.prepareStatement("update ordenpedido set camionAsignado = ?, costoEnvio = ? where id_ordenPedido = ?");
+			pr2 = conn.prepareStatement("update ordenpedido set camionAsignado = ?, costoEnvio = ?, estado = 2 where id_ordenPedido = ?");
 			pr2.setInt(1, c.getId());
 			pr2.setDouble(2, orden.getCostoEnvio());
 			pr2.setInt(3, orden.getNroOrden());

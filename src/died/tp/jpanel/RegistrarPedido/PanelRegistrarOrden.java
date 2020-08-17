@@ -70,15 +70,13 @@ public class PanelRegistrarOrden extends JPanel{
 				if(tablaDatos.getSelectedRow() != -1) {
 					String cantidad = JOptionPane.showInputDialog("Ingrese la cantidad a agregar");
 					if(cantidad != null && cantidad.length() != 0) {		
-						tablaModelo2.agregar(opc.nuevoInsumo(tablaDatos.getSelectedRow()),Integer.valueOf(cantidad));
+						tablaModelo2.agregar(opc.nuevoInsumo(tablaDatos.getSelectedRow(),Integer.valueOf(cantidad)),Integer.valueOf(cantidad));
 						tablaModelo2.fireTableDataChanged();
 						opc.actualizarValorCompra(Integer.valueOf(cantidad),Integer.valueOf(tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 2).toString()));
 					}
 				}
 			}
 		});
-		
-	
 		
 		JButton btnVolver = new JButton("Volver");
 		btnVolver.addActionListener(new ActionListener() {
@@ -132,16 +130,16 @@ public class PanelRegistrarOrden extends JPanel{
 		
 		//JtextFields
 		comboBoxPlanta = new JComboBox<String>();
-		comboBoxPlanta.setBounds(167, 66, 120, 22);
+		comboBoxPlanta.setBounds(286, 66, 120, 22);
 		add(comboBoxPlanta);
 		cargarComboBox();
 		
 		JLabel lblNewLabel_1 = new JLabel("Fecha de entrega m\u00E1xima");
-		lblNewLabel_1.setBounds(26, 114, 131, 14);
+		lblNewLabel_1.setBounds(68, 114, 145, 14);
 		add(lblNewLabel_1);
 		
 		dateChooserFechaMaxima = new JDateChooser();
-		dateChooserFechaMaxima.setBounds(167, 108, 120, 20);
+		dateChooserFechaMaxima.setBounds(286, 108, 120, 20);
 		add(dateChooserFechaMaxima);
 		
 		
@@ -151,11 +149,11 @@ public class PanelRegistrarOrden extends JPanel{
 		add(label);
 		
 		JLabel lblNewLabel_2 = new JLabel("Precio total:");
-		lblNewLabel_2.setBounds(26, 154, 70, 14);
+		lblNewLabel_2.setBounds(68, 154, 70, 14);
 		add(lblNewLabel_2);
 		
 		textFieldPrecioTotal = new JTextField();
-		textFieldPrecioTotal.setBounds(168, 151, 120, 20);
+		textFieldPrecioTotal.setBounds(286, 151, 120, 20);
 		add(textFieldPrecioTotal);
 		textFieldPrecioTotal.setColumns(10);
 		textFieldPrecioTotal.setEditable(false);
@@ -163,12 +161,9 @@ public class PanelRegistrarOrden extends JPanel{
 		
 		
 		JLabel lblNewLabel = new JLabel("Seleccionar la planta:");
-		lblNewLabel.setBounds(26, 74, 113, 14);
+		lblNewLabel.setBounds(68, 70, 131, 14);
 		add(lblNewLabel);
-		
-	
-
-		
+			
 		
 	}
 	private void cargarComboBox() {

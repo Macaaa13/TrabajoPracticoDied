@@ -7,13 +7,13 @@ public class Planta {
 	//Atributos
 	private Integer id;
 	private String nombrePlanta;
-	private List<Stock> stockInsumos;
+	private Map<Stock,Integer> stockInsumos;
 	
 	
 	//Constructor
 	public Planta (String np) {
 		this.nombrePlanta = np;
-		stockInsumos = new ArrayList<Stock>();
+		stockInsumos = new HashMap<Stock,Integer>();
 	}
 	
 	public Planta() { }
@@ -36,11 +36,11 @@ public class Planta {
 		this.id = id;
 	}
 	
-	public List<Stock> getStockInsumos() {
+	public Map<Stock,Integer> getStockInsumos() {
 		return stockInsumos;
 	}
 
-	public void setStockInsumos(List<Stock> stockInsumos) {
+	public void setStockInsumos(Map<Stock,Integer> stockInsumos) {
 		this.stockInsumos = stockInsumos;
 	}
 	

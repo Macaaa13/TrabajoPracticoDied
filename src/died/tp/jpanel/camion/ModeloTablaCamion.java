@@ -20,12 +20,14 @@ public class ModeloTablaCamion extends AbstractTableModel{
 		data.clear();
 	}
 
-	public void mostrar(List<Camion> lista) {
-		if(lista!=null) {
+	public boolean mostrar(List<Camion> lista) {
+		if(!lista.isEmpty()) {
 			data = lista;
+			return true;
 		}
 		else {
 			JOptionPane.showMessageDialog(null, "No existen resultados");
+			return false;
 		}
 		
 	}

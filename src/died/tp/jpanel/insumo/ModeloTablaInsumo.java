@@ -20,11 +20,13 @@ public class ModeloTablaInsumo extends AbstractTableModel {
 		data.clear();
 	} 
 	
-	public void mostrar(Map<Insumo,Integer> lista ) {
-		if(lista!=null) {
+	public boolean mostrar(Map<Insumo,Integer> lista ) {
+		if(!lista.isEmpty()) {
 			data = lista.keySet().stream().collect(Collectors.toList());
 			stockTotales = lista.values().stream().collect(Collectors.toList());
+			return true;
 		}	
+		return false;
 	}
 	
 	
@@ -41,7 +43,7 @@ public class ModeloTablaInsumo extends AbstractTableModel {
 			case 0:
 				return i.getId();
 			case 1:
-				return i.getDescripcion();
+				return i.getNombre();
 			case 2:
 				return i.getuMedida();
 			case 3:

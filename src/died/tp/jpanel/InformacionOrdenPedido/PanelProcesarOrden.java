@@ -18,16 +18,15 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 
-public class PanelRegistrarOrden extends JPanel {
+public class PanelProcesarOrden extends JPanel {
 
 	private JComboBox<String> comboBoxPlantas;
-	private JPanel dibujoGrafos;
 	InformacionOrdenController ordenController;
 	JComboBox<String> comboBoxTipoRuta;
 	JScrollPane scrollPane;
 	
 
-	public PanelRegistrarOrden(OrdenDePedido op, MenuPedidos mp, PanelInformacionOrden pio, InformacionOrdenController odc) {
+	public PanelProcesarOrden(OrdenDePedido op, MenuPedidos mp, PanelInformacionOrden pio, InformacionOrdenController odc) {
 		setLayout(null);
 		setSize(645,400);
 		
@@ -38,7 +37,6 @@ public class PanelRegistrarOrden extends JPanel {
 		
 		
 		this.ordenController = odc;
-		ordenController.setPanel(this);
 		
 		comboBoxPlantas = new JComboBox<String>();
 		comboBoxPlantas.setBounds(120, 32, 90, 22);
@@ -74,29 +72,37 @@ public class PanelRegistrarOrden extends JPanel {
 		JButton btnNewButton = new JButton("Buscar rutas");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ordenController.armarGrafo(comboBoxTipoRuta.getSelectedItem().toString(),comboBoxPlantas.getSelectedItem().toString());
-				ModeloTablaRegistrarOrden tablaModelo = new ModeloTablaRegistrarOrden(ordenController.getValorMaximo(),ordenController.getListaPlantas());
-				JTable tablaDatos = new JTable(tablaModelo);
-				tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-				tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-				DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-				centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-				tablaDatos.setDefaultRenderer(String.class, centerRenderer);
-				scrollPane = new JScrollPane(tablaDatos);
-				scrollPane.setBounds(221, 10, 395, 345);
-				add(scrollPane);
-			}
+				if(ordenController.buscarRutas(comboBoxTipoRuta.getSelectedItem().toString(),comboBoxPlantas.getSelectedItem().toString())) {
+					ModeloTablaRegistrarOrden tablaModelo = new ModeloTablaRegistrarOrden(ordenController.getValorMaximo(),ordenController.getListaPlantas());
+					JTable tablaDatos = new JTable(tablaModelo);
+					tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+					tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+					DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+					centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+					tablaDatos.setDefaultRenderer(String.class, centerRenderer);
+					scrollPane = new JScrollPane(tablaDatos);
+					scrollPane.setBounds(221, 10, 395, 345);
+					add(scrollPane);
+				
+					}
+				}
 		});
 		
 		btnNewButton.setBounds(77, 111, 134, 23);
 		add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Seleccionar Ruta");
+		JButton btnNewButton_1 = new JButton("Procesar orden");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int rta = JOptionPane.showConfirmDialog(null, "¿Está seguro de que quiere avanzar? Se procesará su orden","Advertencia",JOptionPane.OK_CANCEL_OPTION);
 				if(rta == JOptionPane.OK_OPTION) {
-					ordenController.procesarOrden();
+					if(ordenController.procesarOrden()) {
+						JOptionPane.showMessageDialog(null, "Orden procesada con éxito");
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "No hay camiones disponibles actualmente");
+
+					}
 				}
 			}
 		});

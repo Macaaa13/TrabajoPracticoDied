@@ -2,6 +2,8 @@ package died.tp.jpanel.stock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -18,11 +20,11 @@ public class ModeloTablaStock extends AbstractTableModel{
 		data.clear();
 	}
 
-	public void mostrar(List<Stock> lista, String p, List<Integer> t) {
+	public void mostrar(Map<Stock,Integer> lista, String p) {
 		if(lista!=null) {
-			data = lista;
+			data = lista.keySet().stream().collect(Collectors.toList());
 			planta = p;
-			totales = t;
+			totales = lista.values().stream().collect(Collectors.toList());
 		}	
 	}
 
@@ -38,7 +40,7 @@ public class ModeloTablaStock extends AbstractTableModel{
 		case 0:
 			return planta;
 		case 1:
-			return s.getProducto().getDescripcion();
+			return s.getProducto().getNombre();
 		case 2: 
 			return s.getCantidad();
 		case 3:

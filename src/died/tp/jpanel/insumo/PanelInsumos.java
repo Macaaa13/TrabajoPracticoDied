@@ -105,8 +105,8 @@ public class PanelInsumos extends JPanel {
 
 	public PanelInsumos () {
 		setLayout(null);
-		setSize(550,400);
-		setSize(1200,400);
+		setSize(1050,400);
+		setSize(1050,400);
 		
 		ic = new InsumoController(this);
 		
@@ -126,7 +126,7 @@ public class PanelInsumos extends JPanel {
 		
 		
 	JScrollPane scrollPanel = new JScrollPane(tablaDatos);
-	scrollPanel.setBounds(440, 50, 710, 280);
+	scrollPanel.setBounds(310, 52, 710, 280);
 	add(scrollPanel, BorderLayout.CENTER);
 	
 	
@@ -144,7 +144,7 @@ public class PanelInsumos extends JPanel {
 			}
 		}
 	});
-	btnAgregar.setBounds(30, 318, 120, 30);
+	btnAgregar.setBounds(30, 225, 120, 30);
 	add(btnAgregar);
 	
 	
@@ -166,7 +166,7 @@ public class PanelInsumos extends JPanel {
 			}
 		}
 	});
-	btnEliminar.setBounds(30, 359, 120, 30);
+	btnEliminar.setBounds(30, 266, 120, 30);
 	add(btnEliminar);
 	
 
@@ -183,7 +183,7 @@ public class PanelInsumos extends JPanel {
 			}
 		}
 	});
-	btnVolver.setBounds(1030, 359, 120, 30);
+	btnVolver.setBounds(888, 343, 120, 30);
 	add(btnVolver);
 	
 	JButton btnModificar = new JButton("Modificar");
@@ -205,7 +205,7 @@ public class PanelInsumos extends JPanel {
 		}
 	});
 
-	btnModificar.setBounds(160, 359, 120, 30);
+	btnModificar.setBounds(180, 266, 120, 30);
 	add(btnModificar);
 
 	JButton btnCancelar = new JButton("Cancelar");
@@ -221,22 +221,24 @@ public class PanelInsumos extends JPanel {
 			limpiar();
 		}
 	});
-	btnCancelar.setBounds(900, 359, 120, 30);
+	btnCancelar.setBounds(758, 343, 120, 30);
 	add(btnCancelar);
 
 	JButton btnBuscar = new JButton("Buscar");
 	btnBuscar.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			tablaModelo.mostrar(ic.buscar());
-			tablaModelo.fireTableDataChanged();
-			btnCancelar.setEnabled(true);
-			btnAgregar.setEnabled(false);
-			btnModificar.setEnabled(true);
-			btnEliminar.setEnabled(true);
-			comboBoxTipo.setEnabled(false);
+			boolean respuesta = tablaModelo.mostrar(ic.buscar());
+			if(respuesta) {
+				tablaModelo.fireTableDataChanged();
+				btnCancelar.setEnabled(true);
+				btnAgregar.setEnabled(false);
+				btnModificar.setEnabled(true);
+				btnEliminar.setEnabled(true);
+				comboBoxTipo.setEnabled(false);
+			}
 		}
 	});
-	btnBuscar.setBounds(160, 318, 120, 30);
+	btnBuscar.setBounds(180, 225, 120, 30);
 	add(btnBuscar);
 
 	btnModificar.setEnabled(false);
@@ -288,11 +290,11 @@ public class PanelInsumos extends JPanel {
 	add(lblDensidad);
 	
 	textFieldDescripcion = new JTextField();
-	textFieldDescripcion.setBounds(180, 200, 233, 106);
+	textFieldDescripcion.setBounds(180, 200, 120, 20);
 	add(textFieldDescripcion);
 	textFieldDescripcion.setColumns(10);
 	
-	JLabel lblDescripcion = new JLabel("Descripci\u00F3n");
+	JLabel lblDescripcion = new JLabel("Nombre");
 	lblDescripcion.setBounds(30, 200, 140, 14);
 	add(lblDescripcion);
 	

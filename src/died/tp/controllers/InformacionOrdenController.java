@@ -1,17 +1,11 @@
 package died.tp.controllers;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import com.mysql.cj.xdevapi.Table;
-
 import died.tp.dao.OrdenDePedidoDao;
 import died.tp.dao.PlantaStockDao;
 import died.tp.dao.RutaDao;
@@ -22,7 +16,7 @@ import died.tp.dominio.Planta;
 import died.tp.grafos.GrafoRutas;
 import died.tp.grafos.Vertice;
 import died.tp.jpanel.InformacionOrdenPedido.PanelInformacionOrden;
-import died.tp.jpanel.InformacionOrdenPedido.PanelRegistrarOrden;
+import died.tp.jpanel.InformacionOrdenPedido.PanelProcesarOrden;
 
 public class InformacionOrdenController {
 
@@ -35,7 +29,7 @@ public class InformacionOrdenController {
 	private OrdenDePedidoDao ordendao;
 	private RutaDao rutadao;
 	private Integer caminoActual;
-	private PanelRegistrarOrden registrarOrden;
+
 	
 	private List<Insumo> insumosPorOrden;
 	
@@ -73,13 +67,14 @@ public class InformacionOrdenController {
 	 * EL STOCK CONTENGA A LOS PRODUCTOS
 	 * Y QUE LA CANTIDAD DEL STOCK SEA MAYOR AL DEL PEDIDO
 	 * 
+	 * 
 	 */
 	public boolean controlarStock(String idOrden) {
 		PlantaStockDao psd = new PlantaStockDao();
 		boolean respuesta = false;
 		orden = this.obtenerOrdenSeleccionada(idOrden);
 		insumosPorOrden = orden.getInsumos().keySet().stream().collect(Collectors.toList());
-		List<Planta> plantasBD = psd.traerPlantas();
+		List<Planta> plantasBD = psd.traerListaPlantas();
 		for(Planta p: plantasBD) {
 			List<Insumo> insporPlanta = ordendao.traerInsumosPorPlanta(p.getId());
 			if((convertir(insporPlanta)).containsAll(convertir(insumosPorOrden))) {
@@ -103,7 +98,7 @@ public class InformacionOrdenController {
 	private List<String> convertir(List<Insumo> lista) {
 		List<String> array = new ArrayList<>();
 		for(Insumo i: lista) {
-			array.add(i.getDescripcion());
+			array.add(i.getNombre());
 		}
 		return array;
 
@@ -117,10 +112,6 @@ public class InformacionOrdenController {
 		
 	}
 	
-	public void setPanel(PanelRegistrarOrden ro) {
-		registrarOrden = ro;
-	}
-	
 	public List<Planta> getPlantas(){
 		return this.plantas;
 	}
@@ -132,22 +123,6 @@ public class InformacionOrdenController {
 		return ordendao.traerCamiones();
 	}
 
-	
-	public void armarGrafo(String tipoCamino, String planta) {
-		Planta plantaOrigen = this.obtenerPlantaSeleccionada(planta);
-		this.grafo.armarGrafo(rutadao.traerRutas());	
-		if(!grafo.hayCamino(grafo.getNodo(plantaOrigen), grafo.getNodo(orden.getDestino()))) {
-			JOptionPane.showMessageDialog(null, "No existen rutas posibles para las plantas seleccionadas");
-		}
-		else {
-			List<List<Vertice<Planta>>> verticesPlantas = grafo.getRutaCorta(plantaOrigen, orden.getDestino(), tipoCamino);
-			this.caminosDeOrden = verticesPlantas;
-			caminoActual = 0;
-		}
-		
-	}
-	
-
 	private Planta obtenerPlantaSeleccionada(String nombre) {
 		for(Planta p: plantas) {
 			if(p.getNombrePlanta().equals(nombre)) {
@@ -158,14 +133,19 @@ public class InformacionOrdenController {
 	}
 
 
-	public void procesarOrden() {
+	public boolean procesarOrden() {
+		
 		Camion c = traerCamionesNoAsig().poll();
-		Planta p = this.caminosDeOrden.get(caminoActual).get(0).getValor();
-		Double km =  grafo.calcularKmHs(this.caminosDeOrden.get(caminoActual),"mas corto");
-		Double duracion = grafo.calcularKmHs(this.caminosDeOrden.get(caminoActual),"mas rapido");
-		c.setKmRecorridos(c.getKmRecorridos()+km);
-		orden.setCostoEnvio(c.getCostoHora()*duracion +c.getCostoKM()*km);
-		ordendao.procesarOrden(c,orden,p.getId());
+		if(c != null) {
+			Planta p = this.caminosDeOrden.get(caminoActual).get(0).getValor();
+			Double km =  grafo.calcularKmHs(this.caminosDeOrden.get(caminoActual),"mas corto");
+			Double duracion = grafo.calcularKmHs(this.caminosDeOrden.get(caminoActual),"mas rapido");
+			c.setKmRecorridos(c.getKmRecorridos()+km);
+			orden.setCostoEnvio(c.getCostoHora()*duracion +c.getCostoKM()*km);
+			ordendao.procesarOrden(c,orden,p.getId());
+			return true;
+		}
+			return false;
 	}
 
 
@@ -193,5 +173,27 @@ public class InformacionOrdenController {
 	public List<List<Vertice<Planta>>> getListaPlantas() {
 		return this.caminosDeOrden;
 	}
+
+
+	/* METODO DESTINADO PARA CONOCER SI EXISTEN O NO RUTAS ENTRE LAS RUTAS CORRESPONDIENTES
+	 * 
+	 */
+	public boolean buscarRutas(String tipoRuta, String planta) {
+		Planta plantaOrigen = this.obtenerPlantaSeleccionada(planta);
+		this.grafo.armarGrafo(rutadao.traerRutas());	
+		if(!grafo.hayCamino(grafo.getNodo(plantaOrigen), grafo.getNodo(orden.getDestino()))) {
+			JOptionPane.showMessageDialog(null, "No existen rutas posibles para las plantas seleccionadas");
+			return false;
+		}
+		else {
+			List<List<Vertice<Planta>>> verticesPlantas = grafo.getRutaCorta(plantaOrigen, orden.getDestino(), tipoRuta);
+			this.caminosDeOrden = verticesPlantas;
+			caminoActual = 0;
+			return true;
+		}
+		
+	}
+		
+	
 	
 }

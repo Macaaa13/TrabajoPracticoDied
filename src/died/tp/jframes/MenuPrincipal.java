@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import died.tp.dao.Conexion;
 import died.tp.jpanel.camion.PanelCamiones;
 import died.tp.jpanel.insumo.PanelInsumos;
 import died.tp.jpanel.planta.PanelPlantas;
@@ -73,7 +72,7 @@ public class MenuPrincipal extends JFrame {
 		JButton botonMenuInsumos = new JButton("Insumos");
 		botonMenuInsumos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setBounds(dim.width/2-600,dim.height/2-225, 1200, 450);
+				setBounds(dim.width/2-600,dim.height/2-225, 1050, 450);
 				setContentPane(new PanelInsumos());
 				setTitle("Insumos");
 			}
@@ -107,7 +106,7 @@ public class MenuPrincipal extends JFrame {
 		JButton btnRutas = new JButton("Rutas");
 		btnRutas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MenuRutas mr = new MenuRutas();
+				new MenuRutas();
 				dispose();
 			}
 		});

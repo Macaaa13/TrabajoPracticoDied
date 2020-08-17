@@ -17,6 +17,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -33,7 +34,7 @@ public class PanelStock extends JPanel {
 	private JTextField textFieldPuntoPedido;
 	private StockController sc;
 	JComboBox<String> comboBoxPlanta;
-
+	ModeloTablaStock tablaModelo;
 	/**
 	 * Create the panel.
 	 */
@@ -43,7 +44,7 @@ public class PanelStock extends JPanel {
 		
 		sc = new StockController(this);
 		
-		ModeloTablaStock tablaModelo = new ModeloTablaStock();
+		tablaModelo = new ModeloTablaStock();
 		JTable tablaDatos = new JTable(tablaModelo);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -53,9 +54,7 @@ public class PanelStock extends JPanel {
 				if(tablaDatos.getSelectedRow() != -1) {
 					cargarFilaSeleccionada(tablaModelo, tablaDatos.getSelectedRow());
 				}
-			}
-			
-			
+			}		
 		});
 		
 		JScrollPane scrollPanel = new JScrollPane(tablaDatos);
@@ -72,8 +71,7 @@ public class PanelStock extends JPanel {
 						if(sc.validacionVacios()) {
 							if(sc.validarCampos()) {
 								sc.actualizar();
-								List<Integer> stocks = new ArrayList<Integer>();
-								tablaModelo.mostrar(sc.traerTodos(stocks), comboBoxPlanta.getSelectedItem().toString(),stocks);
+								tablaModelo.mostrar(sc.traerTodos(), comboBoxPlanta.getSelectedItem().toString());
 								tablaModelo.fireTableDataChanged();
 								JOptionPane.showMessageDialog(null, "Stock Modificado", "Acción exitosa", JOptionPane.PLAIN_MESSAGE);
 								limpiar();
@@ -119,13 +117,15 @@ public class PanelStock extends JPanel {
 		JButton btnCargarStocks = new JButton("Cargar stocks");
 		btnCargarStocks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Integer> st = new ArrayList<Integer>();
-				List<Stock> stocks = sc.traerTodos(st);
+				Map<Stock,Integer> stocks = sc.traerTodos();
 				if(!stocks.isEmpty()) {
-				tablaModelo.mostrar(stocks, comboBoxPlanta.getSelectedItem().toString(),st);
-				tablaModelo.fireTableDataChanged();
+					tablaModelo.mostrar(stocks, comboBoxPlanta.getSelectedItem().toString());
+					tablaModelo.fireTableDataChanged();
+					btnAgregarPlanta.setEnabled(false);
 				}
 				else {
+					tablaModelo.limpiar();
+					tablaModelo.fireTableDataChanged();
 					JOptionPane.showMessageDialog(null, "No hay resultados ");
 				}
 			}

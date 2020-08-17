@@ -1,14 +1,9 @@
 package died.tp.jpanel.InformacionOrdenPedido;
 
 import java.awt.BorderLayout;
-import java.awt.Window;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-
 import died.tp.dominio.OrdenDePedido;
 import died.tp.jframes.MenuPedidos;
 

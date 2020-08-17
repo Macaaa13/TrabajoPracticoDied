@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import died.tp.controllers.InformacionOrdenController;
 import died.tp.dominio.OrdenDePedido;
@@ -69,7 +68,7 @@ public class PanelInformacionOrden extends JPanel{
 						if(ordenController.controlarStock(tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 0).toString())){
 							/*Window w = SwingUtilities.getWindowAncestor(PanelInformacionOrden.this);
 							w.setSize(1000, 1000);*/
-							mp.setContentPane(new PanelRegistrarOrden(ordenController.obtenerOrdenSeleccionada(tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 0).toString()),mp,getPanel(),ordenController));
+							mp.setContentPane(new PanelProcesarOrden(ordenController.obtenerOrdenSeleccionada(tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 0).toString()),mp,getPanel(),ordenController));
 						}
 						else {
 							JOptionPane.showMessageDialog(null, "Actualmente no contamos con la cantidad de stock requerida, su orden será cancelada");

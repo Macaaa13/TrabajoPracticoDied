@@ -63,7 +63,7 @@ public void eliminarFila(int selectedRow) {
 	public Object getValueAt(int fila, int columna) {
 		Insumo i = data.get(fila);
 		switch(columna) {
-		case 0: return i.getDescripcion();
+		case 0: return i.getNombre();
 		case 1: return i.getuMedida();
 		case 2: return i.getCosto();
 		case 3:{

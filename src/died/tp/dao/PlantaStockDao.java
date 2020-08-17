@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import died.tp.dominio.Insumo;
 import died.tp.dominio.InsumoGeneral;
@@ -35,7 +37,7 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 			p.setId(rs.getInt("id_planta"));
 			p.setNombrePlanta(rs.getString("nombrePlanta"));
 			}
-			p.setStockInsumos(traerTodos(p.getId(), null));
+			p.setStockInsumos(traerTodos(p.getId()));
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -47,8 +49,42 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 				e.printStackTrace();
 			}
 		}
-		return p;
-		
+		return p;	
+	}
+	
+	/* EL BOOLEANO HACE QUE TRAIGAN TODAS LAS PLANTAS DE LA TABLA PLANTAS
+	 * O BIEN LAS PLANTAS DE LA TABLA PLANTASTOCK, LOS UNO PARA UTILZAR MENOS CODIGO
+	 */
+
+	public List<Planta> traerListaPlantas() {
+		List<Planta> resultado = new ArrayList<Planta>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = Conexion.getConexion();
+			pstmt= conn.prepareStatement("select * from Planta");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Planta p = new Planta();
+				p.setId(rs.getInt("id_planta"));
+				p.setNombrePlanta(rs.getString("nombrePlanta"));
+				PlantaStockDao psd = new PlantaStockDao();
+				p.setStockInsumos(psd.traerTodos(p.getId()));
+				resultado.add(p);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs!=null) rs.close();
+				if(pstmt!=null) pstmt.close();
+				if(conn!=null) conn.close();				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return resultado;
 	}
 	
 	public Insumo traerInsumo(String nombreI) {
@@ -174,8 +210,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 	}
 	
 	
-	public List<Stock> traerTodos(Integer p, List<Integer> stocks) {
-		List<Stock> lista = new ArrayList<Stock>();
+	public Map<Stock,Integer> traerTodos(Integer p) {
+		Map<Stock,Integer> lista = new HashMap<Stock,Integer>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -196,10 +232,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 					s.setCantidad(rs.getInt("cantidad"));
 					s.setPuntoPedido(rs.getInt("puntoPedido"));
 					s.setProducto(il);
-					lista.add(s);
-					if(stocks != null) {
-						stocks.add(this.traerStock(il.getId()));
-					}
+					lista.put(s, traerStock(p));
+					
 				}
 				else {
 					InsumoGeneral ig = new InsumoGeneral();
@@ -212,10 +246,7 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 					s.setCantidad(rs.getInt("cantidad"));
 					s.setPuntoPedido(rs.getInt("puntoPedido"));
 					s.setProducto(ig);
-					lista.add(s);
-					if(stocks != null) {
-						stocks.add(this.traerStock(ig.getId()));
-					}
+					lista.put(s, traerStock(p));
 				}
 			}			
 		} catch (SQLException e) {
@@ -231,7 +262,7 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		}
 		return lista;
 	}
-
+	
 	public Integer traerStock(Integer id) {
 		Integer stock = 0;
 		Connection conn = null;
@@ -258,6 +289,7 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		}	
 		return stock;
 	}
+	
 
 	public List<String> traerPlantas() {
 		List<String> resultado = new ArrayList<String>();

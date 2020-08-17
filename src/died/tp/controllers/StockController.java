@@ -1,7 +1,8 @@
 package died.tp.controllers;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -15,14 +16,13 @@ public class StockController {
 
 	private Stock s;
 	private Planta p;
-	private List<Stock> listaStock;
+	private Map<Stock,Integer> listaStock;
 	private PanelStock ps;
 	private PlantaStockDao psd;
 	
-	
 	public StockController(PanelStock ps) {
 		this.ps = ps;
-		this.listaStock = new ArrayList<Stock>();
+		this.listaStock = new HashMap<Stock,Integer>();
 		this.psd = new PlantaStockDao();
 		this.s = new Stock();
 	}
@@ -33,10 +33,12 @@ public class StockController {
 	
 	public void setPlanta(String planta) {
 		this.p = psd.getPlanta(planta);
+		listaStock = p.getStockInsumos();
 	}
 	
-	public List<Stock> traerTodos(List<Integer> s){
-		return psd.traerTodos(p.getId(),s);
+	public Map<Stock,Integer> traerTodos(){
+		setPlanta(ps.getComboBoxPlanta().getSelectedItem().toString());
+		return listaStock;
 	}
 
 	public void agregarInsumoPlanta() {
@@ -47,10 +49,8 @@ public class StockController {
 					Insumo i = this.existeInsumo();
 					if(i != null) {
 						actualizarModelo(i);
-						p.getStockInsumos().add(s);
 						psd.darAltaStock(p.getNombrePlanta(),s);
 						JOptionPane.showMessageDialog(null, "Agregado el insumo "+ ps.getTextFieldInsumo().getText()+" a la planta "+ps.getComboBoxPlanta().getSelectedItem().toString());
-						//limpiar();
 					}
 					else {
 						ps.informarError("El insumo no fue agregado.\n Por favor agregarlo desde la pestaña Insumos y volver a intentar.");
@@ -98,7 +98,7 @@ public class StockController {
 		actualizarModelo(existeInsumo());
 		psd.actualizarStock(p.getId(), s);
 		listaStock.clear();
-		listaStock.addAll(traerTodos(null));
+		listaStock = traerTodos();
 		
 	}
 

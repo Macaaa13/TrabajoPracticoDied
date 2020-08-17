@@ -30,7 +30,7 @@ public class InsumoDao {
 			pr = con.prepareStatement(update);
 			pr.setString(1, i.getuMedida());
 			pr.setDouble(2, i.getCosto());
-			pr.setString(3, i.getDescripcion());
+			pr.setString(3, i.getNombre());
 			pr.setInt(4, i.getId());
 			pr.executeUpdate();
 			}
@@ -38,7 +38,7 @@ public class InsumoDao {
 				pr = con.prepareStatement(insert);
 				pr.setString(1, i.getuMedida());
 				pr.setDouble(2, i.getCosto());
-				pr.setString(3, i.getDescripcion());
+				pr.setString(3, i.getNombre());
 				pr.executeUpdate();
 				this.setId(i);
 			}
