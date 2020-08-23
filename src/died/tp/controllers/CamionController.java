@@ -48,7 +48,7 @@ public class CamionController {
 			actualizarModelo();
 			camiones =  cd.buscarTodos(armarString());
 		}
-		if(camiones.isEmpty()) {
+	    if(camiones.isEmpty()) {
 			pc.informarSituacion("No hay resultados");
 		}
 		return camiones;

@@ -221,6 +221,32 @@ public class Grafo<T> {
     }
     
     
+  //Para PageRank
+    public List<T> adyacentes(T valor){
+    	Vertice<T> nodo = this.getNodo(valor);
+    	List<T> salida = new ArrayList<T>();
+		for(Arista<T> enlace : this.aristas){
+			if(enlace.getInicio().equals(nodo)){
+				salida.add(enlace.getFin().getValor());
+			} else if(enlace.getFin().equals(nodo)) {
+				salida.add(enlace.getInicio().getValor());
+			}
+		}
+		return salida;
+    }
+    
+    public List<Vertice<T>> adyacentes(Vertice<T> nodo){
+    	List<Vertice<T>> salida = new ArrayList<Vertice<T>>();
+		for(Arista<T> enlace : this.aristas){
+			if(enlace.getInicio().equals(nodo)){
+				salida.add(enlace.getFin());
+			} else if(enlace.getFin().equals(nodo)) {
+				salida.add(enlace.getInicio());
+			}
+		}
+		return salida;
+    }
+    
 }
 	
 	

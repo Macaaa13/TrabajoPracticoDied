@@ -26,7 +26,6 @@ public class ModeloTablaCamion extends AbstractTableModel{
 			return true;
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "No existen resultados");
 			return false;
 		}
 		

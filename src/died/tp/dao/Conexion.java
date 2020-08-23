@@ -11,7 +11,7 @@ public class Conexion {
 
 	private static final String url = "jdbc:mysql://localhost:3306/trabajopracticodied";
 	private static final String usuario = "root";
-	private static final String clave = "onestepcloser01";
+	private static final String clave = "root";
 	private static Properties pr;
 	private static boolean tablasCreadas;
 

@@ -1,11 +1,9 @@
 package died.tp.grafos;
 
-	public class Vertice<T>implements Comparable<T>  {
+	public class Vertice<T> {
 	
 		//Atributos
 		private T valor;
-		private boolean visitado;
-		private double dist = Double.MAX_VALUE;
 		
 		//Constructores
 		public Vertice(){	}
@@ -24,21 +22,6 @@ package died.tp.grafos;
 			return this.valor;
 		}
 		
-		public boolean isVisitado() {
-			return visitado;
-		}
-
-		public void setVisitado(boolean visitado) {
-			this.visitado = visitado;
-		}
-
-		public double getDist() {
-			return dist;
-		}
-
-		public void setDist(double dist) {
-			this.dist = dist;
-		}
 		
 		//Métodos
 		@Override
@@ -61,16 +44,5 @@ package died.tp.grafos;
 			return true;
 		}
 	
-		
-		
-		@Override
-		public String toString() {
-			return valor.toString();
-		}
 	
-		@Override
-		public int compareTo(Object o) {
-			Vertice v = (Vertice) o;
-			return Double.compare(this.dist, v.getDist());
-		}
 }

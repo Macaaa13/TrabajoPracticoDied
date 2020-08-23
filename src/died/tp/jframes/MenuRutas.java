@@ -13,6 +13,8 @@ import javax.swing.border.EmptyBorder;
 
 import died.tp.controllers.PlantaController;
 import died.tp.jpanel.planta.PanelPlantas;
+import died.tp.jpanel.ruta.PanelFlujoMax;
+import died.tp.jpanel.ruta.PanelPageRank;
 import died.tp.jpanel.ruta.PanelRutas;
 
 import javax.swing.JButton;
@@ -57,10 +59,21 @@ public class MenuRutas extends JFrame {
 		
 		JButton btnFlujoMax = new JButton("Flujo M\u00E1ximo");
 		btnFlujoMax.setBounds(210, 130, 120, 30);
+		btnFlujoMax.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setContentPane(new PanelFlujoMax());
+			}
+			
+		});
 		panelInicial.add(btnFlujoMax);
 		
 		JButton btnPageRank = new JButton("Page Rank");
 		btnPageRank.setBounds(210, 170, 120, 30);
+		btnPageRank.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setContentPane(new PanelPageRank());
+			}
+		});
 		panelInicial.add(btnPageRank);
 		
 		JButton btnVolver = new JButton("Volver");

@@ -302,7 +302,7 @@ public class PanelCamiones extends JPanel {
 	}
 	
 	public void informarSituacion(String error) {
-		JOptionPane.showMessageDialog(null, error);
+		JOptionPane.showMessageDialog(null, error,"Error",JOptionPane.ERROR_MESSAGE);
 	}
 	
 	public void limpiar() {
