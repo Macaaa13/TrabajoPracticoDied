@@ -30,22 +30,20 @@ public class GrafoRutas extends Grafo<Planta> {
 	//Ruta más corta (Tiempo o KM)
 	public List<List<Vertice<Planta>>> getRutaCorta(Planta p1, Planta p2, String tipo){ 
         List<List<Vertice<Planta>>> listaCaminos = caminos(getNodo(p1),getNodo(p2));
-        for(List<Vertice<Planta>> lv: listaCaminos) {
-        	System.out.println("\nLista");
-        	for(Vertice<Planta> v: lv) {
-        		System.out.println(v.getValor().getNombrePlanta());
-        	}
-        }
         Map<List<Vertice<Planta>>, Double> map = new HashMap<List<Vertice<Planta>>, Double>();
-        for(List<Vertice<Planta>> listaVert: listaCaminos) {
-            map.put(listaVert, calcularKmHs(listaVert, tipo));
-        }
-        return calcularListaFinal(map);
+        if(listaCaminos.isEmpty()) {
+			return null;
+		} else {
+			for(List<Vertice<Planta>> listaVert: listaCaminos) {
+	            map.put(listaVert, calcularKmHs(listaVert, tipo));
+	        }
+	        return calcularListaFinal(map);
+		}
     }
 	
 	public List<List<Vertice<Planta>>> calcularListaFinal(Map<List<Vertice<Planta>>, Double> map){
         List<List<Vertice<Planta>>> listaFinal = new ArrayList<List<Vertice<Planta>>>();
-        Double min = Collections.max(map.values());
+        Double min = Collections.min(map.values());
         for(Entry<List<Vertice<Planta>>, Double> entry: map.entrySet()) {
             if(entry.getValue().equals(min)) {
                 listaFinal.add(entry.getKey());
@@ -58,11 +56,11 @@ public class GrafoRutas extends Grafo<Planta> {
         Double dist = 0.0;
         if(tipo.equals("mas corto")) {
             for(int i=0; i<lv.size()-1; i++) {
-                dist += aristaND(lv.get(i), lv.get(i+1)).getDistancia();
+                dist += arista(lv.get(i), lv.get(i+1)).getDistancia();
             }
         } else {
             for(int i=0; i<lv.size()-1; i++) {
-                dist += aristaND(lv.get(i), lv.get(i+1)).getDuracionEstimada();
+                dist += arista(lv.get(i), lv.get(i+1)).getDuracionEstimada();
             }
         }
         return dist;
@@ -83,9 +81,9 @@ public class GrafoRutas extends Grafo<Planta> {
 	
 	private void buscarCaminosAux(Vertice<Planta> v1, Vertice<Planta> v2, List<Vertice<Planta>> marcados,List<List<Vertice<Planta>>> salida) {
 		//CASO DIRIGIDO
-		//List<Vertice<Planta>> adyacentes = this.getAdyacentesV(v1);
+		List<Vertice<Planta>> adyacentes = this.getAdyacentesV(v1);
 		//CASO NO DIRIGIDO
-		List<Vertice<Planta>> adyacentes = this.adyacentesV(v1);
+		//List<Vertice<Planta>> adyacentes = this.adyacentesV(v1);
 		List<Vertice<Planta>> copiaMarcados = null;
 		for(Vertice<Planta> ady: adyacentes) {
 			copiaMarcados = marcados.stream().collect(Collectors.toList());
@@ -137,14 +135,14 @@ public class GrafoRutas extends Grafo<Planta> {
 		for(int i=1; i<l.size()-1; i++) {
 			
 			//CASO DIRIGIDO
-			//if(arista(l.get(i), l.get(i+1)).getPesoMax()<min) {
-			//	min = arista(l.get(i), l.get(i+1)).getPesoMax();
-			//}
+			if(arista(l.get(i), l.get(i+1)).getPesoMax()<min) {
+				min = arista(l.get(i), l.get(i+1)).getPesoMax();
+			}
 			
 			//CASO NO DIRIGIDO
-			if(aristaND(l.get(i), l.get(i+1)).getPesoMax()<min) {
-				min = aristaND(l.get(i), l.get(i+1)).getPesoMax();
-			}
+			//if(aristaND(l.get(i), l.get(i+1)).getPesoMax()<min) {
+			//	min = aristaND(l.get(i), l.get(i+1)).getPesoMax();
+			//}
 		}
 		return min;
 	}
@@ -170,14 +168,14 @@ public class GrafoRutas extends Grafo<Planta> {
 			sumatoria = 0.0;
 			
 			//CASO DIRIGIDO
-			//for(Vertice<Planta> adyacente: this.getAdyacentesV(v)) {
-			//	sumatoria += 1.0/(this.getAdyacentesV(adyacente).size());
-			//}
+			for(Vertice<Planta> adyacente: this.getAdyacentesV(v)) {
+				sumatoria += 1.0/(this.getAdyacentesV(adyacente).size());
+			}
 			
 			//CASO NO DIRIGIDO
-			for(Vertice<Planta> adyacente: this.adyacentesV(v)) {
-				sumatoria += 1.0/(this.adyacentesV(adyacente).size());
-			}
+			//for(Vertice<Planta> adyacente: this.adyacentesV(v)) {
+			//	sumatoria += 1.0/(this.adyacentesV(adyacente).size());
+			//}
 			valor = 0.5 + (0.5 * sumatoria);
 			map.put(v.getValor(), valor);
 		}
