@@ -30,6 +30,12 @@ public class GrafoRutas extends Grafo<Planta> {
 	//Ruta más corta (Tiempo o KM)
 	public List<List<Vertice<Planta>>> getRutaCorta(Planta p1, Planta p2, String tipo){ 
         List<List<Vertice<Planta>>> listaCaminos = caminos(getNodo(p1),getNodo(p2));
+        for(List<Vertice<Planta>> lv: listaCaminos) {
+        	System.out.println("\nLista");
+        	for(Vertice<Planta> v: lv) {
+        		System.out.println(v.getValor().getNombrePlanta());
+        	}
+        }
         Map<List<Vertice<Planta>>, Double> map = new HashMap<List<Vertice<Planta>>, Double>();
         for(List<Vertice<Planta>> listaVert: listaCaminos) {
             map.put(listaVert, calcularKmHs(listaVert, tipo));
@@ -52,11 +58,11 @@ public class GrafoRutas extends Grafo<Planta> {
         Double dist = 0.0;
         if(tipo.equals("mas corto")) {
             for(int i=0; i<lv.size()-1; i++) {
-                dist += arista(lv.get(i), lv.get(i+1)).getDistancia();
+                dist += aristaND(lv.get(i), lv.get(i+1)).getDistancia();
             }
         } else {
             for(int i=0; i<lv.size()-1; i++) {
-                dist += arista(lv.get(i), lv.get(i+1)).getDuracionEstimada();
+                dist += aristaND(lv.get(i), lv.get(i+1)).getDuracionEstimada();
             }
         }
         return dist;
@@ -76,7 +82,10 @@ public class GrafoRutas extends Grafo<Planta> {
 	}
 	
 	private void buscarCaminosAux(Vertice<Planta> v1, Vertice<Planta> v2, List<Vertice<Planta>> marcados,List<List<Vertice<Planta>>> salida) {
-		List<Vertice<Planta>> adyacentes = this.getAdyacentesV(v1);
+		//CASO DIRIGIDO
+		//List<Vertice<Planta>> adyacentes = this.getAdyacentesV(v1);
+		//CASO NO DIRIGIDO
+		List<Vertice<Planta>> adyacentes = this.adyacentesV(v1);
 		List<Vertice<Planta>> copiaMarcados = null;
 		for(Vertice<Planta> ady: adyacentes) {
 			copiaMarcados = marcados.stream().collect(Collectors.toList());
@@ -126,8 +135,15 @@ public class GrafoRutas extends Grafo<Planta> {
 	public Integer calcularMin(List<Vertice<Planta>> l) {
 		int min = arista(l.get(0), l.get(1)).getPesoMax();
 		for(int i=1; i<l.size()-1; i++) {
-			if(arista(l.get(i), l.get(i+1)).getPesoMax()<min) {
-				min = arista(l.get(i), l.get(i+1)).getPesoMax();
+			
+			//CASO DIRIGIDO
+			//if(arista(l.get(i), l.get(i+1)).getPesoMax()<min) {
+			//	min = arista(l.get(i), l.get(i+1)).getPesoMax();
+			//}
+			
+			//CASO NO DIRIGIDO
+			if(aristaND(l.get(i), l.get(i+1)).getPesoMax()<min) {
+				min = aristaND(l.get(i), l.get(i+1)).getPesoMax();
 			}
 		}
 		return min;
@@ -152,8 +168,15 @@ public class GrafoRutas extends Grafo<Planta> {
 		Double valor;
 		for(Vertice<Planta> v: this.getVertices()) {
 			sumatoria = 0.0;
-			for(Vertice<Planta> adyacente: this.adyacentes(v)) {
-				sumatoria += 1.0/(this.adyacentes(adyacente).size());
+			
+			//CASO DIRIGIDO
+			//for(Vertice<Planta> adyacente: this.getAdyacentesV(v)) {
+			//	sumatoria += 1.0/(this.getAdyacentesV(adyacente).size());
+			//}
+			
+			//CASO NO DIRIGIDO
+			for(Vertice<Planta> adyacente: this.adyacentesV(v)) {
+				sumatoria += 1.0/(this.adyacentesV(adyacente).size());
 			}
 			valor = 0.5 + (0.5 * sumatoria);
 			map.put(v.getValor(), valor);

@@ -15,6 +15,7 @@ import died.tp.controllers.PlantaController;
 import died.tp.jpanel.planta.PanelPlantas;
 import died.tp.jpanel.ruta.PanelFlujoMax;
 import died.tp.jpanel.ruta.PanelPageRank;
+import died.tp.jpanel.ruta.PanelRutaCorta;
 import died.tp.jpanel.ruta.PanelRutas;
 
 import javax.swing.JButton;
@@ -54,13 +55,14 @@ public class MenuRutas extends JFrame {
 				
 			}
 		});
-		btnCrearRuta.setBounds(210, 90, 120, 30);
+		btnCrearRuta.setBounds(210, 85, 120, 30);
 		panelInicial.add(btnCrearRuta);
 		
 		JButton btnFlujoMax = new JButton("Flujo M\u00E1ximo");
-		btnFlujoMax.setBounds(210, 130, 120, 30);
+		btnFlujoMax.setBounds(210, 125, 120, 30);
 		btnFlujoMax.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setBounds(dim.width/2-500,dim.height/2-200, 1000, 400);
 				setContentPane(new PanelFlujoMax());
 			}
 			
@@ -68,7 +70,7 @@ public class MenuRutas extends JFrame {
 		panelInicial.add(btnFlujoMax);
 		
 		JButton btnPageRank = new JButton("Page Rank");
-		btnPageRank.setBounds(210, 170, 120, 30);
+		btnPageRank.setBounds(210, 165, 120, 30);
 		btnPageRank.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setContentPane(new PanelPageRank());
@@ -84,8 +86,17 @@ public class MenuRutas extends JFrame {
 				mp.setVisible(true);
 			}
 		});
-		btnVolver.setBounds(210, 251, 120, 30);
+		btnVolver.setBounds(210, 271, 120, 30);
 		panelInicial.add(btnVolver);
+		
+		JButton btnRutaCorta = new JButton("Ruta Corta");
+		btnRutaCorta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setBounds(dim.width/2-500,dim.height/2-200, 1000, 400);
+				setContentPane(new PanelRutaCorta());
+			}
+		});
+		btnRutaCorta.setBounds(210, 205, 120, 30);
+		panelInicial.add(btnRutaCorta);
 	}
-
 }
