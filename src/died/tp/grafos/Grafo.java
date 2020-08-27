@@ -220,43 +220,6 @@ public class Grafo<T> {
     	return null;
     }
     
-    
-  //Grafo No Dirigido
-    public List<T> adyacentes(T valor){
-    	Vertice<T> nodo = this.getNodo(valor);
-    	List<T> salida = new ArrayList<T>();
-		for(Arista<T> enlace : this.aristas){
-			if(enlace.getInicio().equals(nodo)){
-				salida.add(enlace.getFin().getValor());
-			} else if(enlace.getFin().equals(nodo)) {
-				salida.add(enlace.getInicio().getValor());
-			}
-		}
-		return salida;
-    }
-    
-    public List<Vertice<T>> adyacentesV(Vertice<T> nodo){
-    	List<Vertice<T>> salida = new ArrayList<Vertice<T>>();
-		for(Arista<T> enlace : this.aristas){
-			if(enlace.getInicio().equals(nodo)){
-				salida.add(enlace.getFin());
-			} else if(enlace.getFin().equals(nodo)) {
-				salida.add(enlace.getInicio());
-			}
-		}
-		return salida;
-    }
-    
-    public Arista<T> aristaND(Vertice<T> v1, Vertice<T> v2){
-    	for(Arista<T> a: this.aristas) {
-    		if(v1.equals(a.getInicio()) && v2.equals(a.getFin()) ||
-    		   v1.equals(a.getFin()) && v2.equals(a.getInicio())){
-    			return a;
-    		}
-    	}
-    	return null;
-    }
-    
 }
 	
 	

@@ -66,8 +66,6 @@ public class PanelInformacionOrden extends JPanel{
 					int rta = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere continuar?","Advertencia", JOptionPane.OK_CANCEL_OPTION);
 					if(rta == JOptionPane.OK_OPTION) {
 						if(ordenController.controlarStock(tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 0).toString())){
-							/*Window w = SwingUtilities.getWindowAncestor(PanelInformacionOrden.this);
-							w.setSize(1000, 1000);*/
 							mp.setContentPane(new PanelProcesarOrden(ordenController.obtenerOrdenSeleccionada(tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 0).toString()),mp,getPanel(),ordenController));
 						}
 						else {

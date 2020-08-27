@@ -1,26 +1,15 @@
 package died.tp.jframes;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Toolkit;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import died.tp.controllers.PlantaController;
-import died.tp.jpanel.planta.PanelPlantas;
-import died.tp.jpanel.ruta.PanelFlujoMax;
-import died.tp.jpanel.ruta.PanelPageRank;
-import died.tp.jpanel.ruta.PanelRutaCorta;
-import died.tp.jpanel.ruta.PanelRutas;
-
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import died.tp.dao.RutaDao;
+import died.tp.jpanel.ruta.*;
+import died.tp.grafos.*;
 
 public class MenuRutas extends JFrame {
 	
@@ -73,7 +62,15 @@ public class MenuRutas extends JFrame {
 		btnPageRank.setBounds(210, 165, 120, 30);
 		btnPageRank.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setContentPane(new PanelPageRank());
+				GrafoRutas gr = new GrafoRutas();
+				RutaDao rd = new RutaDao();
+				gr.armarGrafo(rd.traerRutas());
+				if(gr.getVertices()!=null) {
+					setContentPane(new PanelPageRank(gr));
+				}	
+				else {
+					JOptionPane.showMessageDialog(null,"No existen rutas que permitan calcular el Page Rank");
+				}
 			}
 		});
 		panelInicial.add(btnPageRank);

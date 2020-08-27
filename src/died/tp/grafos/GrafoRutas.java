@@ -3,6 +3,8 @@ package died.tp.grafos;
 
 import died.tp.dominio.Planta;
 import died.tp.dominio.Ruta;
+import died.tp.jpanel.ruta.PanelFlujoMax;
+import died.tp.jpanel.ruta.PanelRutaCorta;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -10,25 +12,14 @@ import java.util.stream.Collectors;
 
 public class GrafoRutas extends Grafo<Planta> {
 
-	
 	//Constructor
 	public GrafoRutas() { 
 	}
 
 	
 	//Métodos
-	/**  El método cumple la función de agregar un vértice y crear una arista si es posible
-	 * 	 Se agrega la última planta de la lista, es decir, la última planta creada
-	 *   Si hay más de una planta, comienzan a crearse las rutas:
-	 *   - Como planta origen se usa la última planta creada
-	 *   - Como planta destino se elige una al azar entre las plantas restantes
-	 *   Una vez agregada la ruta al grafo, se busca la última arista agregada que contiene todos los datos necesarios
-	 *   para crear la ruta, y el controller se ocupa de indicarle al dao que debe guardar los datos en la base de datos
-	 */
-
-	
 	//Ruta más corta (Tiempo o KM)
-	public List<List<Vertice<Planta>>> getRutaCorta(Planta p1, Planta p2, String tipo){ 
+	public List<List<Vertice<Planta>>> getRutaCorta(Planta p1, Planta p2, String tipo, PanelRutaCorta prc){ 
         List<List<Vertice<Planta>>> listaCaminos = caminos(getNodo(p1),getNodo(p2));
         Map<List<Vertice<Planta>>, Double> map = new HashMap<List<Vertice<Planta>>, Double>();
         if(listaCaminos.isEmpty()) {
@@ -37,13 +28,25 @@ public class GrafoRutas extends Grafo<Planta> {
 			for(List<Vertice<Planta>> listaVert: listaCaminos) {
 	            map.put(listaVert, calcularKmHs(listaVert, tipo));
 	        }
-	        return calcularListaFinal(map);
+	        return getRutaCortaFinal(map, tipo, prc);
 		}
     }
 	
-	public List<List<Vertice<Planta>>> calcularListaFinal(Map<List<Vertice<Planta>>, Double> map){
+	public List<List<Vertice<Planta>>> getRutaCortaFinal(Map<List<Vertice<Planta>>, Double> map, String tipo, PanelRutaCorta prc){
         List<List<Vertice<Planta>>> listaFinal = new ArrayList<List<Vertice<Planta>>>();
         Double min = Collections.min(map.values());
+        // Se llama a la función 2 veces: en una se muestra por pantalla la distancia o la duración mínima y en otra no
+        // Por ello, se valida si el panel es nulo o no
+        if(prc!=null) {
+        	if(tipo.equals("Corta")) {
+        		prc.setDuracion("");
+        		prc.setDistancia(min.toString());
+            }  
+        	else if(tipo.equals("Rápida")) {
+        		prc.setDistancia("");
+            	prc.setDuracion(min.toString());
+            }
+        }
         for(Entry<List<Vertice<Planta>>, Double> entry: map.entrySet()) {
             if(entry.getValue().equals(min)) {
                 listaFinal.add(entry.getKey());
@@ -54,11 +57,11 @@ public class GrafoRutas extends Grafo<Planta> {
 
     public Double calcularKmHs(List<Vertice<Planta>> lv, String tipo) {
         Double dist = 0.0;
-        if(tipo.equals("mas corto")) {
+        if(tipo.equals("Corta")) {
             for(int i=0; i<lv.size()-1; i++) {
                 dist += arista(lv.get(i), lv.get(i+1)).getDistancia();
             }
-        } else {
+        } else if(tipo.equals("Rápida")) {
             for(int i=0; i<lv.size()-1; i++) {
                 dist += arista(lv.get(i), lv.get(i+1)).getDuracionEstimada();
             }
@@ -80,10 +83,7 @@ public class GrafoRutas extends Grafo<Planta> {
 	}
 	
 	private void buscarCaminosAux(Vertice<Planta> v1, Vertice<Planta> v2, List<Vertice<Planta>> marcados,List<List<Vertice<Planta>>> salida) {
-		//CASO DIRIGIDO
 		List<Vertice<Planta>> adyacentes = this.getAdyacentesV(v1);
-		//CASO NO DIRIGIDO
-		//List<Vertice<Planta>> adyacentes = this.adyacentesV(v1);
 		List<Vertice<Planta>> copiaMarcados = null;
 		for(Vertice<Planta> ady: adyacentes) {
 			copiaMarcados = marcados.stream().collect(Collectors.toList());
@@ -112,12 +112,12 @@ public class GrafoRutas extends Grafo<Planta> {
 				this.addNodo(r.getOrigen());
 				this.addNodo(r.getDestino());
 			}
-			this.conectar(r.getOrigen(), r.getDestino(), r.getDistancia(), r.getDuracionEstimada(), r.getPesoMax());	
+			conectar(r.getOrigen(), r.getDestino(), r.getDistancia(), r.getDuracionEstimada(), r.getPesoMax());	
 		}
 	}
 	
 	//Flujo Máximo
-	public List<List<Vertice<Planta>>> flujoMax(Planta origen, Planta destino) {
+	public List<List<Vertice<Planta>>> flujoMax(Planta origen, Planta destino, PanelFlujoMax pfm) {
 		List<List<Vertice<Planta>>> listaRutas = this.caminos(origen, destino);
 		Map<List<Vertice<Planta>>, Integer> map = new HashMap<List<Vertice<Planta>>, Integer>();
 		if(listaRutas.isEmpty()) {
@@ -126,31 +126,27 @@ public class GrafoRutas extends Grafo<Planta> {
 			for(List<Vertice<Planta>> lista: listaRutas) {
 				map.put(lista, calcularMin(lista));
 			}
-			return flujoMaxFinal(map);
+			return flujoMaxFinal(map, pfm);
 		}
 	}
 		
 	public Integer calcularMin(List<Vertice<Planta>> l) {
 		int min = arista(l.get(0), l.get(1)).getPesoMax();
 		for(int i=1; i<l.size()-1; i++) {
-			
-			//CASO DIRIGIDO
 			if(arista(l.get(i), l.get(i+1)).getPesoMax()<min) {
 				min = arista(l.get(i), l.get(i+1)).getPesoMax();
 			}
-			
-			//CASO NO DIRIGIDO
-			//if(aristaND(l.get(i), l.get(i+1)).getPesoMax()<min) {
-			//	min = aristaND(l.get(i), l.get(i+1)).getPesoMax();
-			//}
 		}
 		return min;
 	}
 		
-	public List<List<Vertice<Planta>>> flujoMaxFinal(Map<List<Vertice<Planta>>, Integer> map){
+	public List<List<Vertice<Planta>>> flujoMaxFinal(Map<List<Vertice<Planta>>, Integer> map, PanelFlujoMax pfm){
 		List<List<Vertice<Planta>>> listaFinal = new ArrayList<List<Vertice<Planta>>>();
 	    int max = Collections.max(map.values());
-	    System.out.println("Flujo max: " + max);
+		//Solo se verifica que no sea nulo para el test
+		if(pfm!=null) {
+			pfm.setFlujoMax(max);
+		}
 	    for(Entry<List<Vertice<Planta>>, Integer> entry: map.entrySet()) {
 	    	if(entry.getValue().equals(max)){
 	    		listaFinal.add(entry.getKey());
@@ -166,16 +162,12 @@ public class GrafoRutas extends Grafo<Planta> {
 		Double valor;
 		for(Vertice<Planta> v: this.getVertices()) {
 			sumatoria = 0.0;
-			
-			//CASO DIRIGIDO
 			for(Vertice<Planta> adyacente: this.getAdyacentesV(v)) {
-				sumatoria += 1.0/(this.getAdyacentesV(adyacente).size());
+				int c = this.getAdyacentesV(adyacente).size();
+				if(c!=0) {
+					sumatoria += 1.0/(this.getAdyacentesV(adyacente).size());
+				}
 			}
-			
-			//CASO NO DIRIGIDO
-			//for(Vertice<Planta> adyacente: this.adyacentesV(v)) {
-			//	sumatoria += 1.0/(this.adyacentesV(adyacente).size());
-			//}
 			valor = 0.5 + (0.5 * sumatoria);
 			map.put(v.getValor(), valor);
 		}

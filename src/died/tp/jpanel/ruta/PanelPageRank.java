@@ -20,17 +20,15 @@ public class PanelPageRank extends JPanel {
 
 	//Atributos
 	private GrafoRutas gr;
-	private RutaDao rd;
 	
 	/**
 	 * Create the panel.
 	 */
-	public PanelPageRank() {
+	public PanelPageRank(GrafoRutas grafo) {
 		setLayout(null);
 		setSize(550,400);
 		
-		gr = new GrafoRutas();
-		rd = new RutaDao();
+		gr = grafo;
 		
 		//Tabla
 		ModeloTablaPageRank tablaModelo = new ModeloTablaPageRank();
@@ -42,13 +40,8 @@ public class PanelPageRank extends JPanel {
 		add(scrollPanel, BorderLayout.CENTER);
 		
 		//Cargar tabla
-		gr.armarGrafo(rd.traerRutas());
-		if(gr.getVertices().isEmpty()) {
-			JOptionPane.showMessageDialog(null,"No existen rutas que permitan calcular el Page Rank");
-		} else {
-			tablaModelo.mostrar(gr.pageRank());
-			tablaModelo.fireTableDataChanged();
-		}
+		tablaModelo.mostrar(gr.pageRank());
+		tablaModelo.fireTableDataChanged();
 		
 		//Botones
 		JButton btnNewButton = new JButton("Volver");

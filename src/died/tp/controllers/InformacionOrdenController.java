@@ -16,7 +16,6 @@ import died.tp.dominio.Planta;
 import died.tp.grafos.GrafoRutas;
 import died.tp.grafos.Vertice;
 import died.tp.jpanel.InformacionOrdenPedido.PanelInformacionOrden;
-import died.tp.jpanel.InformacionOrdenPedido.PanelProcesarOrden;
 
 public class InformacionOrdenController {
 
@@ -28,8 +27,6 @@ public class InformacionOrdenController {
 	private PanelInformacionOrden panelInfo;
 	private OrdenDePedidoDao ordendao;
 	private RutaDao rutadao;
-	private Integer caminoActual;
-
 	
 	private List<Insumo> insumosPorOrden;
 	
@@ -66,8 +63,6 @@ public class InformacionOrdenController {
 	/* POR CADA PLANTA HAY QUE VERIFICAR QUE:
 	 * EL STOCK CONTENGA A LOS PRODUCTOS
 	 * Y QUE LA CANTIDAD DEL STOCK SEA MAYOR AL DEL PEDIDO
-	 * 
-	 * 
 	 */
 	public boolean controlarStock(String idOrden) {
 		PlantaStockDao psd = new PlantaStockDao();
@@ -133,7 +128,7 @@ public class InformacionOrdenController {
 	}
 
 
-	public boolean procesarOrden() {
+	public void procesarOrden(Integer caminoActual) {
 		
 		Camion c = traerCamionesNoAsig().poll();
 		if(c != null) {
@@ -143,21 +138,15 @@ public class InformacionOrdenController {
 			c.setKmRecorridos(c.getKmRecorridos()+km);
 			orden.setCostoEnvio(c.getCostoHora()*duracion +c.getCostoKM()*km);
 			ordendao.procesarOrden(c,orden,p.getId());
-			return true;
+			JOptionPane.showMessageDialog(null, "Orden procesada con éxito");
 		}
-			return false;
+		else {
+			JOptionPane.showMessageDialog(null, "No hay camiones disponibles actualmente");
+		}
 	}
 
-
-
-	public boolean actualizarValor(Integer i) {
-		if(this.caminoActual > 0 && this.caminoActual < this.caminosDeOrden.size()) {
-			caminoActual+=i;
-			return true;
-		}
-		return false;
-	}
 	
+	//OBTENGO EL VALOR MÁXIMO DE LAS LISTAS PARA SABER CUANTAS COLUMNAS TENGO QUE MOSTRAR EN LA TABLA
 	public Integer getValorMaximo() {
 		Integer valMax = 0;
 		for(List<Vertice<Planta>> v: this.caminosDeOrden) {
@@ -181,19 +170,16 @@ public class InformacionOrdenController {
 	public boolean buscarRutas(String tipoRuta, String planta) {
 		Planta plantaOrigen = this.obtenerPlantaSeleccionada(planta);
 		this.grafo.armarGrafo(rutadao.traerRutas());	
-		if(!grafo.hayCamino(grafo.getNodo(plantaOrigen), grafo.getNodo(orden.getDestino()))) {
+		List<List<Vertice<Planta>>> verticesPlantas = grafo.getRutaCorta(plantaOrigen, orden.getDestino(), tipoRuta, null);
+		if(verticesPlantas.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No existen rutas posibles para las plantas seleccionadas");
 			return false;
 		}
 		else {
-			List<List<Vertice<Planta>>> verticesPlantas = grafo.getRutaCorta(plantaOrigen, orden.getDestino(), tipoRuta);
 			this.caminosDeOrden = verticesPlantas;
-			caminoActual = 0;
 			return true;
 		}
 		
 	}
-		
-	
 	
 }

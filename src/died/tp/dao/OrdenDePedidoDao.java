@@ -331,10 +331,11 @@ public class OrdenDePedidoDao {
 			pr.setDouble(1, c.getKmRecorridos());
 			pr.setInt(2, c.getId());
 			pr.executeUpdate();
-			pr2 = conn.prepareStatement("update ordenpedido set camionAsignado = ?, costoEnvio = ?, estado = 2 where id_ordenPedido = ?");
+			pr2 = conn.prepareStatement("update ordenpedido set camionAsignado = ?, costoEnvio = ?, plantaOrigen = ?, estado = 2 where id_ordenPedido = ?");
 			pr2.setInt(1, c.getId());
 			pr2.setDouble(2, orden.getCostoEnvio());
-			pr2.setInt(3, orden.getNroOrden());
+			pr2.setInt(3, id);
+			pr2.setInt(4, orden.getNroOrden());
 			pr2.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
