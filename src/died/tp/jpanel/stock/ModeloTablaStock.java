@@ -12,6 +12,7 @@ import died.tp.dominio.Stock;
 
 public class ModeloTablaStock extends AbstractTableModel{
 
+	//Atributos
 	private String[] columnNames = {"Planta", "Insumo", "Stock", "Punto pedido", "Stock total"};
 	private List<Stock> data = new ArrayList<Stock>();
 	private String planta;
@@ -20,6 +21,8 @@ public class ModeloTablaStock extends AbstractTableModel{
 		data.clear();
 	}
 
+	
+	//Métodos
 	public void mostrar(Map<Stock,Integer> lista, String p) {
 		if(lista!=null) {
 			data = lista.keySet().stream().collect(Collectors.toList());
@@ -34,6 +37,7 @@ public class ModeloTablaStock extends AbstractTableModel{
 		return id;
 	}
 	
+	@Override
 	public Object getValueAt(int fila, int columna) {
 		Stock s = data.get(fila);
 		switch(columna) {

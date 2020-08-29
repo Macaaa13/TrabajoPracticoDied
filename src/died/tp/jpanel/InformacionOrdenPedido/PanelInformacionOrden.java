@@ -21,14 +21,20 @@ import javax.swing.JButton;
 
 public class PanelInformacionOrden extends JPanel{
 
+	//Atributos
 	private InformacionOrdenController ordenController;
 	
+	
+	/**
+	 * Create the panel.
+	 */
 	public PanelInformacionOrden(MenuPedidos mp) {
 		setLayout(null);
 		setSize(635,450);
 		
 		ordenController = new InformacionOrdenController(this);
 		
+		//Tabla
 		ModeloTablaInfoOrden tablaModelo = new ModeloTablaInfoOrden();
 		JTable tablaDatos = new JTable(tablaModelo);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -38,11 +44,7 @@ public class PanelInformacionOrden extends JPanel{
 		scrollPanel.setBounds(226, 71, 340, 280);
 		add(scrollPanel, BorderLayout.CENTER);
 		
-		
-		JLabel lblNewLabel = new JLabel("Informaci\u00F3n sobre las ordenes creadas:");
-		lblNewLabel.setBounds(226, 46, 239, 14);
-		add(lblNewLabel);
-		
+		//Botones
 		JButton btnCargarOrdenes = new JButton("Cargar ordenes");
 		btnCargarOrdenes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -56,7 +58,7 @@ public class PanelInformacionOrden extends JPanel{
 				tablaModelo.fireTableDataChanged();
 			}
 		});
-		btnCargarOrdenes.setBounds(63, 87, 148, 23);
+		btnCargarOrdenes.setBounds(40, 95, 148, 30);
 		add(btnCargarOrdenes);
 		
 		JButton btnDisponibilidad = new JButton("Procesar orden ");
@@ -81,7 +83,7 @@ public class PanelInformacionOrden extends JPanel{
 				}
 			}
 		});
-		btnDisponibilidad.setBounds(63, 121, 148, 23);
+		btnDisponibilidad.setBounds(40, 136, 148, 30);
 		add(btnDisponibilidad);
 		
 		JButton btnVolver = new JButton("Volver");
@@ -96,10 +98,10 @@ public class PanelInformacionOrden extends JPanel{
 				}
 			}
 		});
-		btnVolver.setBounds(477, 362, 89, 23);
+		btnVolver.setBounds(477, 362, 89, 30);
 		add(btnVolver);
 		
-		JButton btnInsumosAsociados = new JButton("Ver insumos asoc.");
+		JButton btnInsumosAsociados = new JButton("Insumos asociados");
 		btnInsumosAsociados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(tablaDatos.getSelectedRow() != -1) {
@@ -111,16 +113,25 @@ public class PanelInformacionOrden extends JPanel{
 				}
 			}
 		});
-		btnInsumosAsociados.setBounds(63, 155, 148, 23);
+		btnInsumosAsociados.setBounds(40, 177, 148, 30);
 		add(btnInsumosAsociados);
 	
+		//Labels
+		JLabel lblNewLabel = new JLabel("Informaci\u00F3n sobre las ordenes creadas");
+		lblNewLabel.setBounds(226, 46, 239, 14);
+		add(lblNewLabel);
 	
 	}
 	
+	//Métodos
+	/* Permite informar diferentes tipos de situaciones
+	 */
 	public void informarSituacion(String st) {
 		JOptionPane.showMessageDialog(null, st);
 	}
 	
+	/* Retorna el panel actual
+	 */
 	public PanelInformacionOrden getPanel() {
 		return this;
 	}

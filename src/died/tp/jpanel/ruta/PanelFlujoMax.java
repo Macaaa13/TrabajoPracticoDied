@@ -36,6 +36,7 @@ public class PanelFlujoMax extends JPanel {
 	private JScrollPane scrollPane;
 	private JTextField textFieldFlujoMax;
 	
+	
 	/**
 	 * Create the panel.
 	 */

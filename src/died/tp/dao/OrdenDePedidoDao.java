@@ -22,6 +22,7 @@ import died.tp.dominio.Planta;
 
 public class OrdenDePedidoDao {
 
+	//Atributos
 	private static String insertOrdenPedido ="insert into OrdenPedido (plantaDestino,fechaEntrega,estado) values (?,?,1) ";
 	private static String insertOrdenInsumos = "insert into OrdenInsumos (id_ordenPedido,id_insumo,cantidadInsumo) values (?,?,?)";
 	private static String traerTodas = "select * from OrdenPedido where estado = ?";
@@ -29,6 +30,8 @@ public class OrdenDePedidoDao {
 	private static String cambiarEstadoOrden = "update OrdenPedido set estado = ? where id_ordenPedido = ?";
 	private static String camionesNoAsignados = "select c.* from Camion c, OrdenPedido op where op.camionAsignado is null";
 	
+	
+	//Métodos
 	public void agregarOrdenPedido(OrdenDePedido op) {
 		Connection con = null;
 		PreparedStatement pr = null;
@@ -131,6 +134,11 @@ public class OrdenDePedidoDao {
 				OrdenDePedido odp = new OrdenDePedido();
 				odp.setNroOrden(rs.getInt("id_ordenPedido"));
 				odp.setFechaEntrega(rs.getDate("fechaEntrega").toLocalDate());
+				odp.setCamionAsignado(obtenerCamionPorId(rs.getInt("camionAsignado")));
+				if(estado == 2) {
+					odp.setCostoEnvio(rs.getDouble("costoEnvio"));
+					odp.setOrigen(obtenerPlantaPorId(rs.getInt("plantaOrigen")));
+				}
 				odp.setDestino(obtenerPlantaPorId(rs.getInt("plantaDestino")));
 				odp.setEst(OrdenDePedido.estado.CREADA);
 				odp.setInsumos(this.traerOrdenesInsumos(odp.getNroOrden()));
@@ -149,6 +157,41 @@ public class OrdenDePedidoDao {
 		}
 		return ordenes;
 		
+	}
+	
+	public Camion obtenerCamionPorId(Integer id) {
+		Connection conn = null;
+		PreparedStatement consulta = null;
+		ResultSet rs = null;
+		Camion c = new Camion();
+		try {
+			conn = Conexion.getConexion();
+			consulta = conn.prepareStatement("select * from camion where id_camion = ?");
+			consulta.setInt(1, id);
+			rs = consulta.executeQuery();
+			if(rs.next()) {
+				c.setId(rs.getInt("id_camion"));
+				c.setMarca(rs.getString("marca"));
+				c.setModelo(rs.getString("modelo"));
+				c.setPatente(rs.getString("patente"));
+				c.setKmRecorridos(rs.getDouble("kmRecorridos"));
+				c.setCostoHora(rs.getDouble("costoHora"));
+				c.setCostoKM(rs.getDouble("costoKM"));
+				c.setFechaCompra(rs.getDate("fechaCompra").toLocalDate());
+			}
+		
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs!=null) rs.close();
+				if(consulta!=null) consulta.close();
+				if(conn!=null) conn.close();				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return c;
 	}
 	
 	private Map<Insumo,Integer> traerOrdenesInsumos(Integer id) {
@@ -199,7 +242,6 @@ public class OrdenDePedidoDao {
 	}
 
 	public Planta obtenerPlantaPorId(Integer planta) {
-		
 		Connection conn = null;
 		PreparedStatement consulta = null;
 		ResultSet rs = null;

@@ -1,31 +1,21 @@
+
 package died.tp.jpanel.camion;
 
 import java.awt.event.ActionEvent;
 
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
+import java.awt.event.*;
 import java.sql.Date;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.*;
 
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JTextFieldDateEditor;
+import com.toedter.calendar.*;
 
 import died.tp.excepciones.*;
 import died.tp.controllers.CamionController;
 import died.tp.jframes.MenuPrincipal;
 
-import java.awt.BorderLayout;
-import java.awt.Window;
+import java.awt.*;
 
 
 public class PanelCamiones extends JPanel {
@@ -120,7 +110,6 @@ public class PanelCamiones extends JPanel {
 				}
 			}
 		});
-		
 		JScrollPane scrollPanel = new JScrollPane(tablaDatos);
 		scrollPanel.setBounds(350, 53, 800, 280);
 		add(scrollPanel, BorderLayout.CENTER);
@@ -130,11 +119,7 @@ public class PanelCamiones extends JPanel {
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					cc.guardar();	
-				} catch(DatosObligatoriosException | FormatoNumeroException ex) {
-					System.out.println(ex.getMessage());
-				}
+					cc.guardar();
 			}
 		});
 		btnAgregar.setBounds(50, 312, 120, 30);
@@ -301,10 +286,15 @@ public class PanelCamiones extends JPanel {
 		
 	}
 	
-	public void informarSituacion(String error) {
-		JOptionPane.showMessageDialog(null, error,"Error",JOptionPane.ERROR_MESSAGE);
+	//Métodos
+	/* Permite informar diferentes tipos de situaciones
+	 */
+	public void informarSituacion(String situacion) {
+		JOptionPane.showMessageDialog(null, situacion);
 	}
 	
+	/* Limpia los textFields y el dataChooser
+	 */
 	public void limpiar() {
 		textFieldPatente.setText(null);
 		textFieldMarca.setText(null);
@@ -315,6 +305,8 @@ public class PanelCamiones extends JPanel {
 		dateChooserFechaCompra.setDate(null);
 	}
 	
+	/* Al seleccionar una fila, sus datos son colocados en los textFields y el dataChooser para que el usuario pueda modificarlos
+	 */
 	public void cargarFilaSeleccionada(ModeloTablaCamion mtc, int fila) {
 		textFieldPatente.setText(mtc.getValueAt(fila, 1).toString()); 
 		textFieldMarca.setText(mtc.getValueAt(fila, 2).toString());
@@ -324,7 +316,5 @@ public class PanelCamiones extends JPanel {
 		textFieldCostoHora.setText(mtc.getValueAt(fila, 6).toString());
 		dateChooserFechaCompra.setDate(Date.valueOf(mtc.getValueAt(fila, 7).toString()));
 	}
-
-	
 	
 }

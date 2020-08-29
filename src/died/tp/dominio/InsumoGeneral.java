@@ -6,12 +6,11 @@ public class InsumoGeneral extends Insumo{
 	private Double peso;
 	
 	
-	//Constructos
+	//Constructores
 	public InsumoGeneral(String d, String u, Integer c, Double p) {
 		super(d, u, c);
 		this.peso = p;
 	}
-
 
 	public InsumoGeneral() {
 		// TODO Auto-generated constructor stub
@@ -30,23 +29,14 @@ public class InsumoGeneral extends Insumo{
 	
 	//Métodos
 	@Override
-	public Double pesoPorUnidad() {
-		return this.getPeso();
-	}
-
-
-	@Override
 	public boolean esLiquido() {
 		return false;
 	}
 
-
 	@Override
 	public boolean esGeneral() {
-
 		return true;
 	}
-
 
 	@Override
 	public void setPesoDensidad(Double peso) {
@@ -54,13 +44,9 @@ public class InsumoGeneral extends Insumo{
 		
 	}
 
-
 	@Override
 	public Double getPesoDensidad() {
 		return this.peso;
 	}
-
-	
-	
 	
 }

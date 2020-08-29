@@ -8,10 +8,6 @@ public abstract class Insumo {
 	private String uMedida;
 	private Integer costo;
 	
-	
-	
-	
-	public abstract Double pesoPorUnidad();
 	public abstract boolean esLiquido();
 	public abstract boolean esGeneral();
 	public abstract void setPesoDensidad(Double d);
@@ -27,7 +23,6 @@ public abstract class Insumo {
 	
 	
 	//Getters and setters
-		
 	public Insumo() {
 	
 	}

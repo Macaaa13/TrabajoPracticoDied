@@ -12,14 +12,22 @@ import died.tp.dominio.Insumo;
 
 public class ModeloTablaInsumo extends AbstractTableModel {
 	
+	//Atributos
 	private String[] columnNames = {"ID Insumo","Descripcion","Unidad de Medida","Costo unidad", "Peso", "Densidad", "Stock "};
 	private List<Insumo> data = new ArrayList<Insumo>();
 	private List<Integer> stockTotales = new ArrayList<Integer>();
 	
+	
+	//Métodos
+	/* Limpia la lista que contiene los datos que se muestran en la tabla
+	 */
 	void limpiar() {
 		data.clear();
 	} 
 	
+	/* Verifica si la lista de insumos pasada por parámetro no esta vacía. En ese caso, actualiza la lista que contiene los datos
+	 * que se muestran en la tabla
+	 */
 	public boolean mostrar(Map<Insumo,Integer> lista ) {
 		if(!lista.isEmpty()) {
 			data = lista.keySet().stream().collect(Collectors.toList());
@@ -28,47 +36,46 @@ public class ModeloTablaInsumo extends AbstractTableModel {
 		}	
 		return false;
 	}
-	
-	
 
+	/* Elimina la fila indicada por parámetro
+	 */
 	public int eliminarFila(int fila) {
 		int id = (int)getValueAt(fila,0);
 		data.remove(fila);
 		return id;
 	}
 	
+	@Override
 	public Object getValueAt(int fila, int columna) {
 		Insumo i = data.get(fila);
-			switch(columna) {
-			case 0:
-				return i.getId();
-			case 1:
-				return i.getNombre();
-			case 2:
-				return i.getuMedida();
-			case 3:
-				return i.getCosto();
-			case 4: {
-					if(i.esGeneral() && i.getPesoDensidad() > 0) {
-						return i.getPesoDensidad();	
-					}
-					return 0;
-					
+		switch(columna) {
+		case 0:
+			return i.getId();
+		case 1:
+			return i.getNombre();
+		case 2:
+			return i.getuMedida();
+		case 3:
+			return i.getCosto();
+		case 4: {
+			if(i.esGeneral() && i.getPesoDensidad() > 0) {
+				return i.getPesoDensidad();	
 			}
-			case 5: {
-					if(i.esLiquido() && i.getPesoDensidad() > 0) {
-					return i.getPesoDensidad();
-					}
-					return 0;
-					
-			}
-			case 6: 
-				if(!stockTotales.isEmpty()) {
-				return stockTotales.get(fila);
-				}
-				return 0;
+			return 0;
 		}
-			return null;
+		case 5: {
+			if(i.esLiquido() && i.getPesoDensidad() > 0) {
+				return i.getPesoDensidad();
+			}
+			return 0;
+		}
+		case 6: 
+			if(!stockTotales.isEmpty()) {
+				return stockTotales.get(fila);
+			}
+			return 0;
+		}
+		return null;
 	}
 	
 	@Override

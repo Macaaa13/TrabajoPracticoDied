@@ -8,9 +8,12 @@ import died.tp.dominio.OrdenDePedido;
 
 public class ModeloTablaInfoOrden extends AbstractTableModel {
 
+	//Atributos
 	private String[] columnNames = {"Numero de pedido","Planta Destino"};
 	private List<OrdenDePedido> data = new ArrayList<OrdenDePedido>();
 	
+	
+	//Métodos
 	public void limpiar() {
 		data.clear();
 	}
@@ -27,7 +30,7 @@ public class ModeloTablaInfoOrden extends AbstractTableModel {
 		}
 	}
 	
-
+	@Override
 	public Object getValueAt(int fila, int columna) {
 		OrdenDePedido op = data.get(fila);
 		switch(columna) {
@@ -36,7 +39,6 @@ public class ModeloTablaInfoOrden extends AbstractTableModel {
 		}
 		return null;
 	}
-	
 	
 	@Override
 	public int getRowCount() {

@@ -13,11 +13,14 @@ import java.awt.event.ActionEvent;
 
 public class PanelInsumosOrdenes extends JPanel {
 
-	
+	/**
+	 * Create the panel.
+	 */
 	public PanelInsumosOrdenes(OrdenDePedido ordenPedido, MenuPedidos mp, PanelInformacionOrden pio) {
 		setLayout(null);
 		setSize(635, 450);
 		
+		//Tabla
 		TablaParaInsumos tablaModelo = new TablaParaInsumos();
 		JTable tablaDatos = new JTable(tablaModelo);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -27,6 +30,8 @@ public class PanelInsumosOrdenes extends JPanel {
 		scrollPanel.setBounds(19, 25, 580, 329);
 		add(scrollPanel, BorderLayout.CENTER);
 		
+		
+		//Botones
 		JButton btnVolver = new JButton("Volver");
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

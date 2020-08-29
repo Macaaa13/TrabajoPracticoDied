@@ -1,8 +1,8 @@
 package died.tp.controllers;
 
-
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +18,7 @@ import died.tp.jpanel.RegistrarPedido.PanelRegistrarOrden;
 
 public class OrdenPedidoController {
 
+	//Atributos
 	Map<Insumo,Integer> insumosOrden;
 	Map<Insumo,Integer> insumosAntesSeleccion;
 	List<Planta> plantas;
@@ -28,6 +29,8 @@ public class OrdenPedidoController {
 	InsumoDao isd;
 	Integer totalCompra;
 	
+	
+	//Constructor
 	public OrdenPedidoController(PanelRegistrarOrden pr) {
 		 pro = pr;
 		 insumosOrden = new HashMap<Insumo,Integer>(); 
@@ -39,18 +42,33 @@ public class OrdenPedidoController {
 		 totalCompra = 0;
 	}
 
+	
+	//Métodos
+	/* Retorna todas las plantas existentes
+	 */
 	public List<String> traerPlantas() {
 		return psd.traerPlantas();
 	}
 
+	/* Retorna un Map con todos los insumos existentes
+	 */
 	public Map<Insumo,Integer> traerInsumos() {
 		this.insumosAntesSeleccion = isd.buscarTodos("");
 		return insumosAntesSeleccion;
 	}
 
-	//AGREGO UN NUEVO MAP PARA LOS INSUMOS DE LA PRIMERA TABLA (LOS QUE SE MUESTRAN SIEMPRE)
+	/* Si el insumo ya existe, se actualiza el valor. 
+	 * De lo contrario, lo añade
+	 */
 	public Insumo nuevoInsumo(Integer fila, Integer cantidad) {
-		this.insumosOrden.put(insumosAntesSeleccion.keySet().stream().collect(Collectors.toList()).get(fila),cantidad);
+		Insumo i = insumosAntesSeleccion.keySet().stream().collect(Collectors.toList()).get(fila);
+		if(insumosOrden.containsKey(i)) {
+			cantidad += insumosOrden.get(i);
+			insumosOrden.replace(i, cantidad);
+		}
+		else {
+			this.insumosOrden.put(i,cantidad);
+		}
 		return this.insumosAntesSeleccion.keySet().stream().collect(Collectors.toList()).get(fila);
 	}
 
@@ -60,15 +78,17 @@ public class OrdenPedidoController {
 		pro.actualizarCompra(totalCompra);
 	}
 
-
-	public boolean agregarOrden() {
+	/* Si se realizó un pedido de compra y se le asignó una fecha máxima, ésta se crea y retorna verdadero. De lo contrario, notifica
+	 * el error correspondiente
+	 */
+	public boolean agregarOrden(Date fecha, String planta) {
 		if(totalCompra!=0) {
 			OrdenDePedido op = new OrdenDePedido();
-			op.setDestino(psd.getPlanta(pro.getComboBoxPlanta().getSelectedItem().toString()));
+			op.setDestino(psd.getPlanta(planta));
 			op.setInsumos(insumosOrden);
 			op.setEst(OrdenDePedido.estado.CREADA);
-			if(pro.getDateChooserFechaMaxima().getDate() != null ) {
-				op.setFechaEntrega(pro.getDateChooserFechaMaxima().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			if(fecha != null ) {
+				op.setFechaEntrega(fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 				opd.agregarOrdenPedido(op);
 				return true;
 			}
@@ -82,6 +102,5 @@ public class OrdenPedidoController {
 			return false;
 		}
 	}
-	
 	
 }

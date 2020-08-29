@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class Conexion {
 
-
+	//Atributos
 	private static final String url = "jdbc:mysql://localhost:3306/trabajopracticodied";
 	private static final String usuario = "root";
 	private static final String clave = "root";
@@ -83,10 +83,13 @@ public class Conexion {
 			+ ")";
 	
 	
+	//Constructor
 	public Conexion() {
 		
 	}
 
+	
+	//Métodos
 	public static Connection conectar() {
 		pr = new Properties();
 		pr.put("user", usuario);

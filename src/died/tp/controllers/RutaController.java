@@ -87,7 +87,6 @@ public class RutaController {
 		boolean b = false;;
 		for(Ruta r: listaRutas) {
 			if((r.getOrigen().equals(o) && r.getDestino().equals(d))) {
-				//|| r.getOrigen().equals(d) && r.getDestino().equals(o)) {
 				b = true;
 			}
 		}

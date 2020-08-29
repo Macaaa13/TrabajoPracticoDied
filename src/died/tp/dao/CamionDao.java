@@ -13,6 +13,7 @@ import died.tp.dominio.Camion;
 
 public class CamionDao {
 
+	//Atributos
  	private static final String selectAll = "SELECT * FROM CAMION";
 	private static final String update = "UPDATE CAMION SET patente = ?, modelo = ?, marca = ?, kmRecorridos = ?, costoKM = ?,"
 			+ " costoHora = ?, fechaCompra = ? where id_camion = ?";
@@ -20,9 +21,12 @@ public class CamionDao {
 	private static final String insert = " INSERT INTO camion (patente,modelo,marca,kmRecorridos,costoHora,costoKM,fechaCompra)"
 			+ "VALUES (?,?,?,?,?,?,?)";
 	private static final String search = "SELECT * FROM CAMION WHERE ";
-	public CamionDao() {}
 	
 	
+	//Métodos
+	/* Si el camión no tiene un id asignado, significa que debe crearse.
+	 * De lo contrario, debe buscarse el camión por el id y actualizar sus datos
+	 */
 	public void altaActualizacionCamion(Camion c) {
 		Connection con = null;
 		PreparedStatement pr = null;
@@ -62,6 +66,8 @@ public class CamionDao {
 		}
 	}
 	
+	/* Elimina el camión cuyo id coincide con el pasado por parámetro
+	 */
 	public void eliminarCamion(Integer id) {
 		Connection con = null;
 		con = Conexion.conectar();
@@ -75,7 +81,10 @@ public class CamionDao {
 		}
 	}
 	
-	public List<Camion> buscarTodos(String s) {
+	/* Dependiendo de si el string pasado por parámetro es nulo o no, se buscan todos los camiones de la base de datos o
+	 * se traen aquellos que cumpran los criterios indicados por el string
+	 */
+	public List<Camion> buscarCamiones(String s) {
 		List<Camion> lista = new ArrayList<Camion>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;

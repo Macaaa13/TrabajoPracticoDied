@@ -25,17 +25,39 @@ import java.awt.event.ActionEvent;
 
 public class PanelPlantas extends JPanel{
 
+	//Atributos
 	private PlantaController pc;
 	private JTextField textFieldPlanta;
 	
 	
+	//Getters y Setters
+	public PlantaController getPc() {
+		return pc;
+	}
+
+	public void setPc(PlantaController pc) {
+		this.pc = pc;
+	}
+
+	public JTextField getTextFieldPlanta() {
+		return textFieldPlanta;
+	}
+
+	public void setTextFieldPlanta(JTextField textField) {
+		this.textFieldPlanta = textField;
+	}
+	
+	
+	/**
+	 * Create the panel.
+	 */
 	public PanelPlantas() {
-		
 		setLayout(null);
 		setSize(1100,405);
 		
 		pc = new PlantaController(this);
 		
+		//Tabla
 		ModeloTablaPlanta tablaModelo = new ModeloTablaPlanta();
 		JTable tablaDatos = new JTable(tablaModelo);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -44,25 +66,11 @@ public class PanelPlantas extends JPanel{
 		scrollPanel.setBounds(299, 59, 411, 280);
 		add(scrollPanel, BorderLayout.CENTER);
 	
-		
-		
-		textFieldPlanta = new JTextField();
-		textFieldPlanta.setBounds(140, 59, 120, 20);
-		add(textFieldPlanta);
-		textFieldPlanta.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel("Nombre de Planta");
-		lblNewLabel.setBounds(22, 60, 129, 14);
-		add(lblNewLabel);	
-		
+		//Botones
 		JButton btnAgregarPlanta = new JButton("Agregar Planta");
 		btnAgregarPlanta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(pc.agregarPlanta()) {
-					JOptionPane.showMessageDialog(null, "Planta agregada");
-				} else {
-					JOptionPane.showMessageDialog(null, "La planta ya existe", "Error", JOptionPane.ERROR_MESSAGE);
-				}
+				pc.agregarPlanta();
 				textFieldPlanta.setText(null);
 			}
 		});
@@ -82,7 +90,6 @@ public class PanelPlantas extends JPanel{
 				tablaModelo.fireTableDataChanged();
 			}
 		});
-		
 		btnBuscar.setBounds(22, 309, 130, 30);
 		add(btnBuscar);
 		
@@ -101,29 +108,24 @@ public class PanelPlantas extends JPanel{
 		btnVolver.setBounds(590, 352, 120, 30);
 		add(btnVolver);
 		
-	}
-
-
-	public PlantaController getPc() {
-		return pc;
-	}
-
-
-	public void setPc(PlantaController pc) {
-		this.pc = pc;
-	}
-
-
-	public JTextField getTextFieldPlanta() {
-		return textFieldPlanta;
-	}
-
-
-	public void setTextFieldPlanta(JTextField textField) {
-		this.textFieldPlanta = textField;
+		//TextFields
+		textFieldPlanta = new JTextField();
+		textFieldPlanta.setBounds(140, 59, 120, 20);
+		add(textFieldPlanta);
+		textFieldPlanta.setColumns(10);
+		
+		//Labels
+		JLabel lblNewLabel = new JLabel("Nombre de Planta");
+		lblNewLabel.setBounds(22, 60, 129, 14);
+		add(lblNewLabel);	
+		
 	}
 	
-	
-	
+	//Métodos
+		/* Permite informar diferentes tipos de situaciones
+		 */
+		public void informarSituacion(String situacion) {
+			JOptionPane.showMessageDialog(null, situacion);
+		}
 	
 }

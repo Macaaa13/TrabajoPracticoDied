@@ -8,10 +8,13 @@ import died.tp.dominio.Ruta;
 
 public class RutaDao {
 
+	//Atributos
 	private static final String selectAll = "SELECT * FROM ruta";
 	private static String insert = "INSERT INTO RUTA (plantaOrigen, plantaDestino, distancia, horasEstimadas, pesoMaximo)" + "VALUES (?,?,?,?,?)";
 	private static String getPlanta = "select p.* from Planta p where p.id_planta = ? ";
 	
+	
+	//Métodos
 	public void agregarRuta(Ruta r) {
 		Connection con = null;
 		PreparedStatement pr = null;

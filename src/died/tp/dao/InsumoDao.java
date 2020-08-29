@@ -12,15 +12,18 @@ import died.tp.dominio.InsumoLiquido;
 
 public class InsumoDao {
 
+	//Atributos
 	private static final String selectAll = "SELECT * FROM Insumo";
 	private static final String update = "UPDATE Insumo SET unidadMedida = ?, costoUnidad = ?, descripcion = ? where id_insumo = ?";
 	private static final String delete = "delete FROM Insumo WHERE id_insumo = ?";
 	private static final String insert = " INSERT INTO Insumo (unidadMedida,costoUnidad,descripcion) VALUES (?,?,?)";
 	private static final String search = "SELECT * FROM INSUMO WHERE ";
 	
-	
-	public InsumoDao() {}
-	
+
+	//Métodos
+	/* Si el insumo no tiene un id asignado, significa que debe crearse.
+	 * De lo contrario, debe buscarse el insumo por el id y actualizar sus datos
+	 */
 	public void altaActualizacionInsumo(Insumo i) {
 		Connection con = null;
 		PreparedStatement pr = null;
@@ -42,7 +45,6 @@ public class InsumoDao {
 				pr.executeUpdate();
 				this.setId(i);
 			}
-			
 			if(i.esGeneral()) {
 				PreparedStatement s = con.prepareStatement("UPDATE Insumo SET peso = "+i.getPesoDensidad().toString()+" WHERE id_insumo = "+i.getId().toString());
 				s.executeUpdate();
@@ -53,8 +55,6 @@ public class InsumoDao {
 				s.executeUpdate();
 				s.close();
 			}
-			
-			
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -67,12 +67,13 @@ public class InsumoDao {
 		}
 	}
 	
-	
+	/* Al crear un insumo en la base de datos, se le asigna un id.
+	 * Una vez creado se buscar el último máximo id y se lo asigna al insumo.
+	 */
 	public void setId(Insumo i) {
 		Connection con = null;
 		PreparedStatement pr = null;
 		ResultSet rs = null;
-	
 		try {
 			con = Conexion.getConexion();
 			pr = con.prepareStatement("SELECT MAX(id_insumo) AS id FROM insumo");
@@ -93,6 +94,8 @@ public class InsumoDao {
 		}
 	}
 	
+	/* Elimina el insumo cuyo id coincide con el pasado por parámetro
+	 */
 	public void eliminarI(Integer id) {
 		Connection con = null;
 		con = Conexion.conectar();
@@ -106,7 +109,9 @@ public class InsumoDao {
 		}
 	}
 	
-
+	/* Si el usuario hizo una búsqueda específica, retorna un Map con los insumos que cumplen esos criterios
+	 * De lo contrario, retorna un Map con todos los insumos existentes
+	 */
 	public Map<Insumo,Integer> buscarTodos(String campos) {
 		Map<Insumo,Integer> lista = new HashMap<Insumo,Integer>();
 		Connection conn = null;
@@ -157,6 +162,8 @@ public class InsumoDao {
 		return lista;
 	}
 	
+	/* Calula el stock del insumo cuyo id coincide con el pasado por parámetro
+	 */
 	public Integer traerStock(Integer id) {
 		Integer stock = 0;
 		Connection conn = null;

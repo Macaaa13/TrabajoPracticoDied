@@ -2,7 +2,6 @@ package died.tp.jpanel.camion;
 
 import java.util.*;
 
-import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 import died.tp.dominio.Camion;
@@ -16,10 +15,15 @@ public class ModeloTablaCamion extends AbstractTableModel{
 
 
 	//Métodos	
+	/* Limpia la lista que contiene los datos que se muestran en la tabla
+	 */
 	public void limpiar() {
 		data.clear();
 	}
 
+	/* Verifica si la lista de camiones pasada por parámetro no esta vacía. En ese caso, actualiza la lista que contiene los datos
+	 * que se muestran en la tabla
+	 */
 	public boolean mostrar(List<Camion> lista) {
 		if(!lista.isEmpty()) {
 			data = lista;
@@ -31,12 +35,15 @@ public class ModeloTablaCamion extends AbstractTableModel{
 		
 	}
 
+	/* Elimina la fila indicada por parámetro
+	 */
 	public int eliminarFila(int fila) {
 		int id = (int)getValueAt(fila,0);
 		data.remove(fila);
 		return id;
 	}
 
+	@Override
 	public Object getValueAt(int fila, int columna) {
 		Camion c = data.get(fila);
 		switch(columna) {

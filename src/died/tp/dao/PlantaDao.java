@@ -16,9 +16,14 @@ import died.tp.dominio.Stock;
 
 public class PlantaDao {
 
+	//Atributos
 	private static String insert = "insert into planta (nombrePlanta) values (?)";
 	private static String delete = "delete FROM camion WHERE id_camion = ?";
 	
+	
+	//Métodos
+	/* Guarda la planta en la base de datos
+	 */
 	public void altaPlanta(String c) {
 		Connection con = null;
 		PreparedStatement pr = null;
@@ -39,7 +44,8 @@ public class PlantaDao {
 		}
 	}
 
-	
+	/* Elimina la planta de la base de datos
+	 */
 	public void eliminarPlanta(Integer id) {
 		Connection con = null;
 		con = Conexion.conectar();

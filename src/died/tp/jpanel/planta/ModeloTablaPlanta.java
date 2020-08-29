@@ -15,22 +15,31 @@ public class ModeloTablaPlanta extends AbstractTableModel{
 
 
 	//Métodos	
+	/* Limpia la lista que contiene los datos que se muestran en la tabla
+	 */
 	public void limpiar() {
 		data.clear();
 	}
 
+	/* Si la lista de plantas pasada por parámetro no esta vacía, la lista que contiene los datos que se muestran en la tabla
+	 * se actualiza
+	 */
 	public void mostrar(List<Planta> lista) {
 		if(lista!=null) {
 			data = lista;
 		}
 	}
 
+
+	/* Elimina la fila indicada por parámetro
+	 */
 	public int eliminarFila(int fila) {
 		int id = (int)getValueAt(fila,0);
 		data.remove(fila);
 		return id;
 	}
 
+	@Override
 	public Object getValueAt(int fila, int columna) {
 		Planta p = data.get(fila);
 		switch(columna) {

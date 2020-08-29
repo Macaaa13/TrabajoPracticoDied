@@ -1,26 +1,21 @@
 package died.tp.jframes;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Toolkit;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import died.tp.jpanel.InformacionOrdenPedido.PanelInformacionOrden;
 import died.tp.jpanel.OrdenEtregada.PanelOrdenEntregada;
 import died.tp.jpanel.RegistrarPedido.PanelRegistrarOrden;
 
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 public class MenuPedidos extends JFrame {
 
+	//Atributos
 	private JPanel contentPane;
 	private static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	
 	
 	/**
 	 * Create the frame.
@@ -34,6 +29,7 @@ public class MenuPedidos extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		//Botones
 		JButton volver = new JButton("Volver");
 		volver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -42,7 +38,7 @@ public class MenuPedidos extends JFrame {
 				dispose();
 			}
 		});
-		volver.setBounds(195, 234, 142, 30);
+		volver.setBounds(190, 238, 140, 30);
 		contentPane.add(volver);
 		
 		JButton btnRegistrarOrden = new JButton("Registrar orden");
@@ -53,7 +49,7 @@ public class MenuPedidos extends JFrame {
 				setTitle("Registrar orden pedido");
 			}
 		});
-		btnRegistrarOrden.setBounds(195, 75, 142, 30);
+		btnRegistrarOrden.setBounds(190, 90, 140, 30);
 		contentPane.add(btnRegistrarOrden);
 		
 		JButton btnInformacionOrden =new JButton("Procesar orden");
@@ -64,7 +60,7 @@ public class MenuPedidos extends JFrame {
 				setTitle("Procesar Orden de pedido");
 			}
 		});
-		btnInformacionOrden.setBounds(195, 127, 142, 30);
+		btnInformacionOrden.setBounds(190, 131, 140, 30);
 		contentPane.add(btnInformacionOrden);
 		
 		JButton btnNewButton = new JButton("Registrar entrega");
@@ -76,10 +72,12 @@ public class MenuPedidos extends JFrame {
 				
 			}
 		});
-		btnNewButton.setBounds(195, 179, 142, 30);
+		btnNewButton.setBounds(190, 172, 140, 30);
 		contentPane.add(btnNewButton);
 	}
 	
+	
+	//Métodos
 	public MenuPedidos getMenu() {
 		return this;
 	}

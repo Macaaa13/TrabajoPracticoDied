@@ -10,7 +10,7 @@ public class Planta {
 	private Map<Stock,Integer> stockInsumos;
 	
 	
-	//Constructor
+	//Constructores
 	public Planta (String np) {
 		this.nombrePlanta = np;
 		stockInsumos = new HashMap<Stock,Integer>();
@@ -43,7 +43,6 @@ public class Planta {
 	public void setStockInsumos(Map<Stock,Integer> stockInsumos) {
 		this.stockInsumos = stockInsumos;
 	}
-	
 	
 	//Métodos
 	@Override

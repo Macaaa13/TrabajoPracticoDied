@@ -6,17 +6,23 @@ import javax.swing.table.DefaultTableModel;
 
 import died.tp.dominio.*;
 import died.tp.grafos.Vertice;
+
 public class ModeloTablaProcesarOrden extends DefaultTableModel {
 
+	//Atributos
 	private Integer valorMaximo;
 	private List<List<Vertice<Planta>>> verticesPlantas;
 	
+	
+	//Constructor
 	public ModeloTablaProcesarOrden(Integer maximo, List<List<Vertice<Planta>>> vertices) {
 		this.valorMaximo = maximo;
 		this.verticesPlantas = vertices;
 		this.añadirATabla();
 	}
 	
+	
+	//Métodos
 	public void añadirATabla() {
 		this.addColumn("Camino n°");
 		for(int i = 0; i < valorMaximo ; i++) {

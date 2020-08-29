@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -32,7 +33,7 @@ public class PanelOrdenEntregada extends JPanel {
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tablaDatos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		tablaModelo.mostrar(infoController.traerTodasOrdenes(2));
-		
+		tablaModelo.fireTableDataChanged();
 		JScrollPane scrollPanel = new JScrollPane(tablaDatos);
 		scrollPanel.setBounds(19, 25, 580, 329);
 		add(scrollPanel, BorderLayout.CENTER);
@@ -54,6 +55,12 @@ public class PanelOrdenEntregada extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(tablaDatos.getSelectedRow() != -1) {
 					infoController.cambiarEstadoOrden(Integer.valueOf(tablaModelo.getValueAt(tablaDatos.getSelectedRow(), 0).toString()), 3);
+					tablaModelo.mostrar(infoController.traerTodasOrdenes(2));
+					tablaModelo.fireTableDataChanged();
+					JOptionPane.showMessageDialog(null, "Orden marcada como entregada");
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Seleccione una orden de pedido");
 				}
 				
 				

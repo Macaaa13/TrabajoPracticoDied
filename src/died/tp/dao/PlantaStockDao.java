@@ -17,13 +17,17 @@ import died.tp.dominio.Stock;
 
 public class PlantaStockDao {
 
-private static String getPlanta = "select p.* from Planta p where p.nombrePlanta = ? ";
-private static String getInsumo = "select * from Insumo i where descripcion = ?";
-private static String selectAllInsumos = "select i.*,ps.* from PlantaStock ps ,Insumo i where ps.id_planta = ? and ps.id_insumo = i.id_insumo and ps.cantidad < ps.puntoPedido";
-private static String insertStock = "insert into plantastock (id_planta,id_insumo,cantidad,puntoPedido) values (?,?,?,?)";
+	//Atributos
+	private static String getPlanta = "select p.* from Planta p where p.nombrePlanta = ? ";
+	private static String getInsumo = "select * from Insumo i where descripcion = ?";
+	private static String selectAllInsumos = "select i.*,ps.* from PlantaStock ps ,Insumo i where ps.id_planta = ? and ps.id_insumo = i.id_insumo and ps.cantidad < ps.puntoPedido";
+	private static String insertStock = "insert into plantastock (id_planta,id_insumo,cantidad,puntoPedido) values (?,?,?,?)";
 	
+	
+	//Métodos
+	/* Retorna la planta cuyo nombre coincide con el pasado por parámetro
+	 */
 	public Planta getPlanta(String planta) {
-		
 		Connection conn = null;
 		PreparedStatement consulta = null;
 		ResultSet rs = null;
@@ -52,10 +56,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		return p;	
 	}
 	
-	/* EL BOOLEANO HACE QUE TRAIGAN TODAS LAS PLANTAS DE LA TABLA PLANTAS
-	 * O BIEN LAS PLANTAS DE LA TABLA PLANTASTOCK, LOS UNO PARA UTILZAR MENOS CODIGO
+	/* Retorna una lista con todas las plantas existentes
 	 */
-
 	public List<Planta> traerListaPlantas() {
 		List<Planta> resultado = new ArrayList<Planta>();
 		Connection conn = null;
@@ -87,6 +89,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		return resultado;
 	}
 	
+	/* Retorna el insumo cuyo nombre coincide con el pasado por parámetro, o null si este no existe
+	 */
 	public Insumo traerInsumo(String nombreI) {
 		Connection conn = null;
 		PreparedStatement consulta = null;
@@ -130,6 +134,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		return i;
 	}
 	
+	/* Crea un nuevo stock
+	 */
 	public void darAltaStock(String p, Stock s) {
 		Connection conn = null;
 		PreparedStatement consulta = null;
@@ -155,6 +161,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		}
 	}
 	
+	/* Actualiza el stock de la planta cuyo id coincide con el pasado por parámetro
+	 */
 	public void actualizarStock(Integer id_planta, Stock s) {
 		Connection conn = null;
 		PreparedStatement consulta = null;
@@ -179,6 +187,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		
 	}
 	
+	/* Si el insumo existe en la planta retorna true, de lo contrario retorna false
+	 */
 	public boolean obtenerInsumo(String nombreInsumo, Integer id_planta) {
 		Connection conn = null;
 		PreparedStatement consulta = null;
@@ -186,7 +196,7 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		Boolean resultado = false;
 		try {
 			conn = Conexion.getConexion();
-			consulta = conn.prepareStatement("select * from PlantaStock ps, Insumo i,Planta p where p.id_planta = ? and ps.id_planta = ? and ps.id_insumo = i.id_insumo and i.descripcion = ?");
+			consulta = conn.prepareStatement("select * from PlantaStock ps, Insumo i, Planta p where p.id_planta = ? and ps.id_planta = ? and ps.id_insumo = i.id_insumo and i.descripcion = ?");
 			consulta.setInt(1, id_planta);
 			consulta.setInt(2, id_planta);
 			consulta.setString(3, nombreInsumo);
@@ -209,7 +219,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		return resultado; 
 	}
 	
-	
+	/* Retorna un Map con todos los stocks existentes
+	 */
 	public Map<Stock,Integer> traerTodos(Integer p) {
 		Map<Stock,Integer> lista = new HashMap<Stock,Integer>();
 		Connection conn = null;
@@ -263,6 +274,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		return lista;
 	}
 	
+	/* Retorna el stock del insumo cuyo id coincide con el pasado por parámetro
+	 */
 	public Integer traerStock(Integer id) {
 		Integer stock = 0;
 		Connection conn = null;
@@ -290,7 +303,8 @@ private static String insertStock = "insert into plantastock (id_planta,id_insum
 		return stock;
 	}
 	
-
+	/* Retorna una lista con los nombres de todas las plantas existentes
+	 */
 	public List<String> traerPlantas() {
 		List<String> resultado = new ArrayList<String>();
 		Connection conn = null;

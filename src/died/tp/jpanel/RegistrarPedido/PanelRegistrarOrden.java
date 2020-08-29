@@ -1,38 +1,65 @@
 package died.tp.jpanel.RegistrarPedido;
 
-import javax.swing.JPanel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
 import com.toedter.calendar.JDateChooser;
 
 import died.tp.controllers.OrdenPedidoController;
 import died.tp.jframes.MenuPedidos;
 
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import java.awt.Component;
-import java.awt.Label;
-import java.awt.Window;
-import java.awt.Button;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
+import java.awt.*;
+import java.awt.event.*;
+
 import java.util.List;
-import java.awt.event.ActionEvent;
 
 public class PanelRegistrarOrden extends JPanel{
+	
+	//Atributos
 	private JTextField textFieldPrecioTotal;
 	private OrdenPedidoController opc;
 	private JComboBox<String> comboBoxPlanta;
-	JDateChooser dateChooserFechaMaxima;
+	private JDateChooser dateChooserFechaMaxima;
 	
+	
+	//Getters y Setters
+	public void actualizarCompra(Integer costo ) {
+		textFieldPrecioTotal.setText(costo.toString());
+		
+	}
+	
+	public JTextField getTextFieldPrecioTotal() {
+		return textFieldPrecioTotal;
+	}
+	
+	public void setTextFieldPrecioTotal(JTextField textFieldPrecioTotal) {
+		this.textFieldPrecioTotal = textFieldPrecioTotal;
+	}
+	
+	public JComboBox<String> getComboBoxPlanta() {
+		return comboBoxPlanta;
+	}
+	
+	public void setComboBoxPlanta(JComboBox<String> comboBoxPlanta) {
+		this.comboBoxPlanta = comboBoxPlanta;
+	}
+	
+	public void informarSituacion(String string) {
+		JOptionPane.showMessageDialog(null, string);
+		
+	}
+	public JDateChooser getDateChooserFechaMaxima() {
+		return dateChooserFechaMaxima;
+	}
+	
+	public void setDateChooserFechaMaxima(JDateChooser dateChooserFechaMaxima) {
+		this.dateChooserFechaMaxima = dateChooserFechaMaxima;
+	}
+	
+	
+	/**
+	 * Create the panel.
+	 */
 	public PanelRegistrarOrden () {
 		setLayout(null);
 		setSize(900,450);
@@ -47,7 +74,7 @@ public class PanelRegistrarOrden extends JPanel{
 		tablaDatos2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 			
 		JScrollPane scrollPanel_1 = new JScrollPane(tablaDatos2);
-		scrollPanel_1.setBounds(416, 69, 474, 234);
+		scrollPanel_1.setBounds(416, 46, 474, 311);
 		add(scrollPanel_1);
 		
 		// TABLA DE INSUMOS NO SELECCIONADOS
@@ -60,7 +87,7 @@ public class PanelRegistrarOrden extends JPanel{
 		tablaDatos.setDefaultRenderer(String.class, centerRenderer);
 		
 		JScrollPane scrollPanel = new JScrollPane(tablaDatos);
-		scrollPanel.setBounds(26, 211, 380, 228);
+		scrollPanel.setBounds(26, 211, 355, 228);
 		add(scrollPanel);
 		tablaModelo.mostrar(opc.traerInsumos());
 		tablaModelo.fireTableDataChanged();
@@ -78,6 +105,8 @@ public class PanelRegistrarOrden extends JPanel{
 			}
 		});
 		
+		
+		//Botones
 		JButton btnVolver = new JButton("Volver");
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -90,20 +119,20 @@ public class PanelRegistrarOrden extends JPanel{
 				}
 			}
 		});
-		btnVolver.setBounds(801, 416, 89, 23);
+		btnVolver.setBounds(801, 409, 89, 30);
 		add(btnVolver);
 		
 		JButton btnRegistrarOrden = new JButton("Registrar Orden");
 		btnRegistrarOrden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(opc.agregarOrden()) {		
+				if(opc.agregarOrden(dateChooserFechaMaxima.getDate(),comboBoxPlanta.getSelectedItem().toString())) {		
 					JOptionPane.showMessageDialog(null, "Orden de pedido registrada");
 					tablaModelo2.limpiar();
 					tablaModelo2.fireTableDataChanged();
 				}
 			}
 		});
-		btnRegistrarOrden.setBounds(759, 314, 131, 23);
+		btnRegistrarOrden.setBounds(759, 368, 131, 30);
 		add(btnRegistrarOrden);
 		
 		JButton btnQuitar = new JButton("Quitar");
@@ -124,48 +153,53 @@ public class PanelRegistrarOrden extends JPanel{
 				
 			}
 		});
-		btnQuitar.setBounds(661, 314, 89, 23);
+		btnQuitar.setBounds(660, 368, 89, 30);
 		add(btnQuitar);
 		
 		
 		//JtextFields
-		comboBoxPlanta = new JComboBox<String>();
-		comboBoxPlanta.setBounds(286, 66, 120, 22);
-		add(comboBoxPlanta);
-		cargarComboBox();
-		
-		JLabel lblNewLabel_1 = new JLabel("Fecha de entrega m\u00E1xima");
-		lblNewLabel_1.setBounds(68, 114, 145, 14);
-		add(lblNewLabel_1);
-		
-		dateChooserFechaMaxima = new JDateChooser();
-		dateChooserFechaMaxima.setBounds(286, 108, 120, 20);
-		add(dateChooserFechaMaxima);
-		
-		
-		
-		Label label = new Label("Seleccione los productos:");
-		label.setBounds(26, 183, 155, 22);
-		add(label);
-		
-		JLabel lblNewLabel_2 = new JLabel("Precio total:");
-		lblNewLabel_2.setBounds(68, 154, 70, 14);
-		add(lblNewLabel_2);
-		
 		textFieldPrecioTotal = new JTextField();
-		textFieldPrecioTotal.setBounds(286, 151, 120, 20);
+		textFieldPrecioTotal.setBounds(231, 127, 150, 20);
 		add(textFieldPrecioTotal);
 		textFieldPrecioTotal.setColumns(10);
 		textFieldPrecioTotal.setEditable(false);
 		textFieldPrecioTotal.setText("0");
 		
 		
+		//Labels
+		JLabel lblNewLabel_1 = new JLabel("Fecha de entrega m\u00E1xima:");
+		lblNewLabel_1.setBounds(30, 90, 176, 14);
+		add(lblNewLabel_1);	
+		
+		Label label = new Label("Seleccione los productos:");
+		label.setBounds(26, 186, 155, 22);
+		add(label);
+		
+		JLabel lblNewLabel_2 = new JLabel("Precio total:");
+		lblNewLabel_2.setBounds(30, 130, 131, 14);
+		add(lblNewLabel_2);
+		
 		JLabel lblNewLabel = new JLabel("Seleccionar la planta:");
-		lblNewLabel.setBounds(68, 70, 131, 14);
+		lblNewLabel.setBounds(30, 50, 131, 14);
 		add(lblNewLabel);
+		
+		//ComboBox
+		comboBoxPlanta = new JComboBox<String>();
+		comboBoxPlanta.setBounds(231, 46, 150, 22);
+		add(comboBoxPlanta);
+		cargarComboBox();
 			
 		
+		//DateChooser
+		dateChooserFechaMaxima = new JDateChooser();
+		dateChooserFechaMaxima.setBounds(231, 90, 150, 20);
+		add(dateChooserFechaMaxima);
+		
 	}
+	
+	//Métodos
+	/* Se cargan en el comboBox los nombres de todas las plantas existentes
+	 */
 	private void cargarComboBox() {
 		List<String> plantas = opc.traerPlantas();
 		if(plantas != null) {
@@ -173,36 +207,13 @@ public class PanelRegistrarOrden extends JPanel{
 			comboBoxPlanta.addItem(s);
 			}
 		}
-	}
-	public void actualizarCompra(Integer costo ) {
-		textFieldPrecioTotal.setText(costo.toString());
-		
-	}
-	public JTextField getTextFieldPrecioTotal() {
-		return textFieldPrecioTotal;
-	}
-	public void setTextFieldPrecioTotal(JTextField textFieldPrecioTotal) {
-		this.textFieldPrecioTotal = textFieldPrecioTotal;
-	}
-	public JComboBox<String> getComboBoxPlanta() {
-		return comboBoxPlanta;
-	}
-	public void setComboBoxPlanta(JComboBox<String> comboBoxPlanta) {
-		this.comboBoxPlanta = comboBoxPlanta;
-	}
-	public void informarSituacion(String string) {
-		JOptionPane.showMessageDialog(null, string);
-		
-	}
-	public JDateChooser getDateChooserFechaMaxima() {
-		return dateChooserFechaMaxima;
-	}
-	public void setDateChooserFechaMaxima(JDateChooser dateChooserFechaMaxima) {
-		this.dateChooserFechaMaxima = dateChooserFechaMaxima;
-	}
+	}	
 	
-	
-	
-	
+	/* Limpia el textField y el dataChooser
+	 */
+	public void limpiar(){
+		dateChooserFechaMaxima.setDate(null);
+		textFieldPrecioTotal.setText(null);
+	}
 	
 }

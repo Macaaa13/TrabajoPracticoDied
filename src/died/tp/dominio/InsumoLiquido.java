@@ -26,36 +26,22 @@ public class InsumoLiquido extends Insumo{
 	public void setDensidad(Double densidad) {
 		this.densidad = densidad;
 	}
-	
-
-	
-	//Métodos
-	@Override
-	public Double pesoPorUnidad() {
-		//PREGUNTAR A MACA
-		return null;
-	}
-
-	
 
 	@Override
 	public boolean esLiquido() {
 		return true;
 	}
 
-
 	@Override
 	public boolean esGeneral() {
 		return false;
 	}
-
 
 	@Override
 	public void setPesoDensidad(Double d) {
 		this.densidad = d;
 		
 	}
-
 
 	@Override
 	public Double getPesoDensidad() {
